@@ -44,7 +44,10 @@ crédito. Escribime y la enciendo: tarda unos minutos.
 
 ## El repositorio
 
-**El código fuente está en el `.zip` de esta carpeta**, completo y sin binarios.
+**El código fuente** está en el `.zip` de esta carpeta, completo y sin binarios,
+y también **navegable sin descargar nada** en
+`https://github.com/patricio-pettini/predictit-entregables/tree/main/codigo-fuente`.
+Es el mismo contenido: la copia navegable se extrae de ese propio `.zip`.
 
 El repositorio de trabajo —con el historial de commits que respalda lo que
 afirma el log de prompts— es **privado**; se puede pedir acceso. Aparte hay uno
