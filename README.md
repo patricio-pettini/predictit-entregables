@@ -51,11 +51,11 @@ La aplicación queda en `http://localhost:8080` y la documentación de la API en
 `http://localhost:8081/swagger`. El detalle está en
 [`codigo-fuente/COMO-EJECUTAR.md`](codigo-fuente/COMO-EJECUTAR.md).
 
-`codigo-fuente/` es exactamente el mismo contenido que
-`ENTREGA TECNOLOGIA/PRIMER ENTREGA/Codigo fuente - PredictIT.zip`: se extrae de
-ese archivo al publicar, así que no pueden diferir. Está sin comprimir porque un
-`.zip` en GitHub no se puede mirar —hay que bajarlo para ver una sola línea— y
-así se navega desde el navegador.
+`codigo-fuente/` sale del mismo `.zip` que se entrega formalmente —se extrae de
+él al publicar, así que no pueden diferir— pero **ese `.zip` no está en este
+repositorio**: acá al lado está su contenido sin comprimir, y tener las dos
+copias sólo agrega peso y la duda de cuál mirar. En la entrega formal el `.zip`
+sí va, porque ahí no hay dónde navegar.
 
 ## Cómo saber que se está leyendo la última versión
 
