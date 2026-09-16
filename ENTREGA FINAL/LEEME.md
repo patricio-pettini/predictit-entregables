@@ -3,6 +3,35 @@
 **Trabajo Final de Ingeniería en Sistemas** · Universidad Abierta Interamericana
 Pettini, Patricio Ezequiel · Legajo B00072710-T1
 
+---
+
+## El sistema, andando
+
+**https://predictit-uai.mexicocentral.cloudapp.azure.com**
+
+Está desplegado en Microsoft Azure y se puede entrar y usar desde cualquier
+navegador, sin instalar nada. La documentación de la API está en
+[`/swagger`](https://predictit-uai.mexicocentral.cloudapp.azure.com/swagger).
+
+**Usuarios de prueba.** Cada uno ve un sistema distinto: los permisos se
+resuelven por patentes y familias, así que conviene entrar con más de uno para
+ver la diferencia.
+
+| Usuario | Contraseña | Qué perfil es |
+|---|---|---|
+| `admin` | `Admin.2026` | Administrador: ve y configura todo |
+| `tecnico1` | `Tecnico.2026` | Responsable Técnico: atiende incidencias y mantenimientos |
+| `tecnico2` | `Tecnico.2026` | Responsable Técnico |
+| `tecnico3` | `Tecnico.2026` | Responsable Técnico |
+| `solicitante` | `Usuario.2026` | Usuario Solicitante: reporta y sigue sus pedidos |
+| `partner` | `Partner.2026` | Partner: administra varias organizaciones |
+
+Los datos son de demostración y se pueden modificar sin problema: se
+reconstruyen desde los scripts de la base cuando haga falta.
+
+**Si la dirección no responde**, la máquina está apagada para no consumir
+crédito. Escribime y la enciendo: tarda unos minutos.
+
 Armado el %s. Esta carpeta se **genera**: no se edita a mano. Para
 reconstruirla, desde la raíz del repositorio:
 

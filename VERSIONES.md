@@ -1,6 +1,6 @@
 # Versiones de los entregables
 
-Generado el 16/09/2026, sobre el commit `7e05815`.
+Generado el 16/09/2026, sobre el commit `192f112`.
 
 **Esta carpeta es lo que se entrega.** Todo lo que esta en `docs/` es la fuente
 con la que se arma: se trabaja ahi, pero no se entrega desde ahi. Si un archivo
@@ -59,7 +59,7 @@ Get-FileHash -Algorithm SHA256 "ENTREGA FINAL\01 - Documento del Trabajo Final v
 | `ENTREGA FINAL/08 - Guión de ensayo de la defensa.pdf` | 728 | 6e1438af7941b81a7a6db2dfe879335045a2be1c3faeeef6942255d47e0ed399 |
 | `ENTREGA FINAL/08 - Presentación de la defensa.pdf` | 989 | f208283db2243e8d846bb10ad68ceaa6f98638952b560c0f07e07d8b965c89f4 |
 | `ENTREGA FINAL/08 - Presentación de la defensa.pptx` | 1092 | cd192a5748a616af264d955559d9b7c0b4ef26db3e5d6cc778198fa568c4d888 |
-| `ENTREGA FINAL/LEEME.md` | 7 | 1280ba6af3758d02ce1f656d46841365db4e04e56e6c857b6a617ab919639208 |
+| `ENTREGA FINAL/LEEME.md` | 9 | 5be689a429a211228e6562c595f6c270c79bb452f162038cea5c65f7c6e6eb87 |
 | `ENTREGA NEGOCIO/PRIMER ENTREGA/LEEME.md` | 5 | 38b7be3ab9cd927da327d2e8aba1745e070bdbd94cf5ddd3a5eb80086222864f |
 | `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.docx` | 80 | 2d8eda6f4e5e3e46210a1013736e1e76f342c7ebb05f047172f82e9fc595e6ad |
 | `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.pdf` | 892 | cdb009ea5205f8f10b70ec37f8b8558368fac49e330d49cff385fc2edb6baedc |
