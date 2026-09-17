@@ -1,6 +1,6 @@
 # Versiones de los entregables
 
-Generado el 16/09/2026, sobre el commit `59c6d52`.
+Generado el 17/09/2026, sobre el commit `35aeea9`.
 
 **Esta carpeta es lo que se entrega.** Todo lo que esta en `docs/` es la fuente
 con la que se arma: se trabaja ahi, pero no se entrega desde ahi. Si un archivo
@@ -21,61 +21,60 @@ En PowerShell, para un archivo suelto:
 Get-FileHash -Algorithm SHA256 "ENTREGA FINAL\01 - Documento del Trabajo Final v2.pdf"
 ```
 
-## Los 303 archivos
+## Los 302 archivos
 
 | Archivo | KB | sha-256 |
 |---|---|---|
-| `ENTREGA FINAL/01 - Documento del Trabajo Final v2.docx` | 32524 | b79fa16391f41c92a0fc7605c88749a9a004c6b12d32688905cb200f9c8cb93e |
-| `ENTREGA FINAL/01 - Documento del Trabajo Final v2.pdf` | 6671 | b2e3973eae486b43da0330114cdc6747ad6924f10177d8d3ee59ec9e729ac351 |
-| `ENTREGA FINAL/02 - Presupuesto financiero.xlsx` | 96 | a87b4db3baddc7d7f3089987fdf0f75b7b0b2cc10052d32ffcfffd1e125b113e |
-| `ENTREGA FINAL/03 - Anexo de trazabilidad del uso de IA.docx` | 72 | bd4641160a653e834263479b5fb8aa10e1f3863466838c89eaa32cc7cbb37ca2 |
-| `ENTREGA FINAL/03 - Anexo de trazabilidad del uso de IA.pdf` | 954 | 9ba6d8f03a2e046a9bff02d364344b691146085f2cc81afb34aa8b7d404b8c4c |
-| `ENTREGA FINAL/04 - Manuales/1 - Manual de instalación.docx` | 449 | 2e1cd9dd35413189c30045c91ce5e55d27c620c21738c17cbd190b4153dd84bd |
-| `ENTREGA FINAL/04 - Manuales/1 - Manual de instalación.pdf` | 945 | 0061c7402ad5a4d25fee44660017e275bdd189d71d20a0144ecf42cdbaabf1c6 |
-| `ENTREGA FINAL/04 - Manuales/2 - Manual de usuario - Administrador.docx` | 4273 | 8ff413f9600108ea7d958da238957e554f5840050890b1983e407fa2b7af3029 |
-| `ENTREGA FINAL/04 - Manuales/2 - Manual de usuario - Administrador.pdf` | 2450 | af223adf5034d441990d84a6cdecc12bea3df00cf0cad5954d74bb62a87289b8 |
-| `ENTREGA FINAL/04 - Manuales/3 - Manual de usuario - Responsable Técnico.docx` | 2043 | d805285129822d1f735a2240429b1c3ce7eb43ee7c4998bb9141d8941c6dd009 |
-| `ENTREGA FINAL/04 - Manuales/3 - Manual de usuario - Responsable Técnico.pdf` | 1595 | 49aea320c7fd6b4798f776bfcf2998e9d7858330d4d98533c0f328f529352a48 |
-| `ENTREGA FINAL/04 - Manuales/4 - Manual de usuario - Usuario Solicitante.docx` | 379 | c3af68d5bde1e356ffb99ee65d7bf8f30883917430e9a51ebad65fbc482d40d5 |
-| `ENTREGA FINAL/04 - Manuales/4 - Manual de usuario - Usuario Solicitante.pdf` | 866 | 9f18376394f90bff9cdd084deb6f926510122402829f1272abe308d9c4b8b3b0 |
-| `ENTREGA FINAL/04 - Manuales/5 - Manual de programador.docx` | 258 | 9d31cbc919ecaabd3c8314ba3bb40accea06f7622d15f6d50d4cf750adc6dfba |
-| `ENTREGA FINAL/04 - Manuales/5 - Manual de programador.pdf` | 1021 | 6c65bfb4f4d09ad4090a7b7060f7e77fc95e2d6939a88ce2cfb436b2759e813d |
-| `ENTREGA FINAL/05 - Documentación técnica/1 - Diccionario de datos.docx` | 52 | 9aca9fc081c6a00d0a6c13e66c9e4359d4845f90512c739655f5a0c776ebae2e |
-| `ENTREGA FINAL/05 - Documentación técnica/1 - Diccionario de datos.pdf` | 892 | c342a7c1158cc05b93b5a6174bc2bf341cac1a4074550635e32df19359b0fc58 |
-| `ENTREGA FINAL/05 - Documentación técnica/2 - Casos de prueba y evidencia.docx` | 53 | cd3207cd1ec79cfd928f6d2af37aedf75a8651c95e55bd410705df57ea769bbe |
-| `ENTREGA FINAL/05 - Documentación técnica/2 - Casos de prueba y evidencia.pdf` | 878 | 2ba0666ae20ff9df8aa0bc920029334d0467be2b436cdae01d1ce478be448ec8 |
-| `ENTREGA FINAL/05 - Documentación técnica/3 - Diagramas del sistema.docx` | 517 | 52cc923fc48185e1b83fb744eb98693ade98a73e9eff582788c6b85f7eac9f3f |
-| `ENTREGA FINAL/05 - Documentación técnica/3 - Diagramas del sistema.pdf` | 1158 | 78c350cad61f161efd85b51abc2b6f05550fd3ea66d639aa0cd5dc5075a6e2ba |
-| `ENTREGA FINAL/05 - Documentación técnica/4 - Patrones y principios, con su archivo.docx` | 56 | 244b762bd25e5fceb7d0b06a6a3af892eb785bbc2cdc54a166b48e4198c4ca0c |
-| `ENTREGA FINAL/05 - Documentación técnica/4 - Patrones y principios, con su archivo.pdf` | 759 | df798585dac4df399a41f68a738102b9625f7ee66e163afb5b4280e26e4a6fea |
-| `ENTREGA FINAL/05 - Documentación técnica/5 - Decisiones de arquitectura (ADR).docx` | 84 | dfc184de3d92c81baa517f95520bf77b6ab0360c123be868d4b1a13fbcca7cdc |
-| `ENTREGA FINAL/05 - Documentación técnica/5 - Decisiones de arquitectura (ADR).pdf` | 1064 | 2ee17453c8bb1d657338fb605d3e2b9b138f55b25c2014629cd1420400c98252 |
+| `ENTREGA FINAL/01 - Documento del Trabajo Final v2.docx` | 32534 | a1bdd9da7367b985f9fdbe03e37a8ba11f37771200d191720ff204b3bfae479e |
+| `ENTREGA FINAL/01 - Documento del Trabajo Final v2.pdf` | 6774 | 02a5b2a56f31b37448439e598485249468877d7706b4ecbe363f66a35b4def92 |
+| `ENTREGA FINAL/02 - Presupuesto financiero.xlsx` | 122 | c1d2d1d71d3863f155126e25fa347f1c38cf787164868e4614c800586c131a26 |
+| `ENTREGA FINAL/03 - Anexo de trazabilidad del uso de IA.docx` | 72 | 48a4064b9c3ee410a1558b3eeb0d973c2e6441853b67743fd0f11a261aaf3cb4 |
+| `ENTREGA FINAL/03 - Anexo de trazabilidad del uso de IA.pdf` | 954 | e5a6a4498f7a142ca04db0f071d54a309e58f89095b40e78d67f66b7d41d2487 |
+| `ENTREGA FINAL/04 - Manuales/1 - Manual de instalación.docx` | 449 | faf3d14c08cad84bb69ed53b351413161eaf0830bf084bdd7815ac2cda12bb30 |
+| `ENTREGA FINAL/04 - Manuales/1 - Manual de instalación.pdf` | 945 | 40d3d90e63f1c44ed50c395b59261800153bb760a3564ef553757f865e768be6 |
+| `ENTREGA FINAL/04 - Manuales/2 - Manual de usuario - Administrador.docx` | 4273 | 4ec436611b44e60a7758b7a0308e34b0d242b87468297c15f414c309c38e9a2e |
+| `ENTREGA FINAL/04 - Manuales/2 - Manual de usuario - Administrador.pdf` | 2452 | fb212824c7162435f4605beaeadfd54e7a1eca1d7b890e0c12f72da423cd874c |
+| `ENTREGA FINAL/04 - Manuales/3 - Manual de usuario - Responsable Técnico.docx` | 2043 | a5cee516cdb8d0f11cc9d034b6695addc06d707f2a3faea5496424544428e7df |
+| `ENTREGA FINAL/04 - Manuales/3 - Manual de usuario - Responsable Técnico.pdf` | 1596 | cb75f889a6a45689998c07f915769246247a443ab68a1903bcabc8b9095ac23f |
+| `ENTREGA FINAL/04 - Manuales/4 - Manual de usuario - Usuario Solicitante.docx` | 379 | b7c55b60d397cac45f752690604c2f60bb675ae87cf711e84b49a1b93c6661ed |
+| `ENTREGA FINAL/04 - Manuales/4 - Manual de usuario - Usuario Solicitante.pdf` | 866 | 90d7ea86827f090a05ae0dd58cc3adde55a1379445da0003090970dd15f50c02 |
+| `ENTREGA FINAL/04 - Manuales/5 - Manual de programador.docx` | 258 | da7d021a2b1f20038e7ef2e2d2dc7b744251fba92a7cf64c12a61414b30492ea |
+| `ENTREGA FINAL/04 - Manuales/5 - Manual de programador.pdf` | 1022 | e709f4d15408302fab32433be71dcbfbb1707c302125e7df9cad0f9305482a35 |
+| `ENTREGA FINAL/05 - Documentación técnica/1 - Diccionario de datos.docx` | 52 | b2e66cda58766d19895aa176ecbf36e218bb3b98c91b4019d0f1b8732fce8d39 |
+| `ENTREGA FINAL/05 - Documentación técnica/1 - Diccionario de datos.pdf` | 892 | 11a43d22a40366a1b0ffdfaf7794401c33c20c43dc0c7922b94e62845be9ea47 |
+| `ENTREGA FINAL/05 - Documentación técnica/2 - Casos de prueba y evidencia.docx` | 53 | c0fc2369aadc588138099fe484ba2197f2b1f4f7748533f794c86dbf210c405f |
+| `ENTREGA FINAL/05 - Documentación técnica/2 - Casos de prueba y evidencia.pdf` | 878 | 955d789312d827014843c4c144393c105abc8e69d33339ebb9f52622d0a1bd0d |
+| `ENTREGA FINAL/05 - Documentación técnica/3 - Diagramas del sistema.docx` | 517 | 73b42bef8a1d6731e1bb7ee44602f4b9849ba33bca27c53ac5d51a9df8abae29 |
+| `ENTREGA FINAL/05 - Documentación técnica/3 - Diagramas del sistema.pdf` | 1158 | 3ca21ef9136469761d4f8b8a9d4a8b7867dc9f8c6d323cc7210e2253e5f3bc2f |
+| `ENTREGA FINAL/05 - Documentación técnica/4 - Patrones y principios, con su archivo.docx` | 56 | a36b184d293e7199234409036ae277a69b93e65769cf490693b999c095d0bbe6 |
+| `ENTREGA FINAL/05 - Documentación técnica/4 - Patrones y principios, con su archivo.pdf` | 759 | 4784baf463234f289e6fc239c85b1a3da088f9172db006d7c9b13e6a8316b3e1 |
+| `ENTREGA FINAL/05 - Documentación técnica/5 - Decisiones de arquitectura (ADR).docx` | 84 | 9c28654958114fd169863bef2fe9b9fcd5d784a9208fcaf38d61d98a1add0c8d |
+| `ENTREGA FINAL/05 - Documentación técnica/5 - Decisiones de arquitectura (ADR).pdf` | 1064 | 0ec1d828c6292a23a7f9cfd773d1d3b2d7f34a223084f5c29403cb9a580e19e1 |
 | `ENTREGA FINAL/05 - Documentación técnica/6 - Verificación` | 0 | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 |
-| `ENTREGA FINAL/05 - Documentación técnica/7 - Modelo Enterprise Architect.eap` | 1968 | 57ab17402c4c42cb52eef55ebcefed700646897bcc94b25349f0bac36205ca7f |
+| `ENTREGA FINAL/05 - Documentación técnica/7 - Modelo Enterprise Architect.eap` | 1972 | b5fdc81e99d229753f01b0c496123d0778b3cda6f998ae912f5bcfe82c461bf7 |
 | `ENTREGA FINAL/06 - Panel de obra.html` | 45 | d7ee3fb227c920836f31af5e37b95ca96aebef96ec4a2f0b6f45c39cc221c68f |
-| `ENTREGA FINAL/07 - Gestión del proyecto/1 - Plan de sprints, hoja de ruta y cambios.docx` | 146 | e578f5c5af434c9a10579adcb64b48dda38637bd209acbdad3387d54b0ca2a12 |
-| `ENTREGA FINAL/07 - Gestión del proyecto/1 - Plan de sprints, hoja de ruta y cambios.pdf` | 1740 | e6792645323a0a21bbfe5713e80713ee4d0157ca320f78bda134e8addac5e136 |
-| `ENTREGA FINAL/08 - Guión de ensayo de la defensa.docx` | 54 | 9380ec53a9047babcade6ea53183f03e3d598847f776d14da810fcb463b9a8e4 |
-| `ENTREGA FINAL/08 - Guión de ensayo de la defensa.pdf` | 728 | c12da1f25749be23172ce18cdf3929b611ca67185b321f5d3bed95b08e45a864 |
-| `ENTREGA FINAL/08 - Presentación de la defensa.pdf` | 989 | 6c46a7599d551030a99b8774f62a72dfecc3a2949b2906a11aad87d1731efb92 |
-| `ENTREGA FINAL/08 - Presentación de la defensa.pptx` | 1092 | e1eb8fe5554b6b44a23f2c8f60ec8d31dfa3985924bcf6cbf798ac56fb132bb6 |
+| `ENTREGA FINAL/07 - Gestión del proyecto/1 - Plan de sprints, hoja de ruta y cambios.docx` | 151 | 5e54121bcd7e1b7bf1e0c2042ee9e19bb7d193851a06d35c8ddbbe7ce07c7774 |
+| `ENTREGA FINAL/07 - Gestión del proyecto/1 - Plan de sprints, hoja de ruta y cambios.pdf` | 1772 | 4acbc8d06678fe994676ef7aeeea40cfd6d0e5200fcce21d15b9c7d971334abb |
+| `ENTREGA FINAL/08 - Guión de ensayo de la defensa.docx` | 54 | 078281ac0acab2a4d37fe2035c6d96c5814e0537c13cfd4b6ccc07fda3fadadf |
+| `ENTREGA FINAL/08 - Guión de ensayo de la defensa.pdf` | 728 | aba6d6c1ac3a3f4b15cbf140516ca2dce43aa233cbfc8bb1fd6725d62e17ca7f |
+| `ENTREGA FINAL/08 - Presentación de la defensa.pdf` | 989 | 3e043a6384e12e95d5da26cb0d3c0d02be202d0166a7b0023d7383ad10d9c03f |
+| `ENTREGA FINAL/08 - Presentación de la defensa.pptx` | 1092 | 8c99be4bffafed6844bbcd4f6287d32b73a5ddd18329b3fda7c480113f992e09 |
 | `ENTREGA FINAL/LEEME.md` | 9 | 5be689a429a211228e6562c595f6c270c79bb452f162038cea5c65f7c6e6eb87 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/LEEME.md` | 5 | 38b7be3ab9cd927da327d2e8aba1745e070bdbd94cf5ddd3a5eb80086222864f |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.docx` | 80 | 463dbc5dbb16f9d816755b78274448499a8035a865f305f1364e67c03cef3d23 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.pdf` | 892 | 92dac42e6efe8827350cf446f1bdfc1c429344b4c818eeef446bfaaca578804a |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Plan de negocio - Entrega 1.docx` | 75 | 895d95dd0e21f7d03dfcff9f9a00fcefe18a6c6113f1d7466656d530c92ae89b |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Plan de negocio - Entrega 1.pdf` | 844 | e7af27282b19d8e630e8ac670cc60b090d924f9d767ad72eb53cfbdb35be060d |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Presupuesto financiero - Entrega 1.xlsx` | 61 | 40ab2273352ae7610c07927087dfadbe217d71ff2621726795afd51ef3d6631d |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/version con color/Plan de negocio - Entrega 1.docx` | 62 | 712c264507cf258b8ad1c57a04fad0f0d8e3ea6cb0f116f245d93b49ba7e08e5 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/version con color/Plan de negocio - Entrega 1.pdf` | 711 | d2503e8ecbdc6f783c56cceb2701fe0845aa2c18f43a39330dc01b2a2f9d4498 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/version con color/Presupuesto financiero - Entrega 1.xlsx` | 50 | eb977bf7c13ab7a9007ad39f957ae75b514689c1313c401f6b859bc7dff9e8c8 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Documento del Trabajo Final - capitulos 1 a 8.docx` | 32454 | 74f5d8e11bdf7561811978098744262de383617b6346c7e7801dd0e4ac4957c4 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Documento del Trabajo Final - capitulos 1 a 8.pdf` | 1661 | 1895de8f11a7b009eb00aabdfb60d96e2968a9f439c851e005d78cb8b85479fb |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/LEEME.md` | 5 | ad87d1831d46e1ab9d37e8e9bac1e23defbbbdfacd43a423d8cb10a4d15ae629 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.docx` | 86 | 356f3e33bffb1787b97d208ad431e8fb138c712fdf6a23e055335b8e8163fc42 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.pdf` | 974 | 411a0f801eb979ff61a204c6de2414795a5abd3932b039d20130239e3c62a630 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Plan de negocio - Entrega 1.docx` | 75 | 6c171666a5180e6834100ae76a5f3c14c320104c802225cda26fc7e5ce40bdf3 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Plan de negocio - Entrega 1.pdf` | 858 | 9fe8635104ef83ecf4529f179857c4075517d71d022ed3412bc57af3991bcd61 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Presupuesto financiero - Entrega 1.xlsx` | 74 | 6bc58a2808975c9f577582243e83bee16a5906f7bb10e886f2a4d3edbf9a7ec2 |
 | `ENTREGA NEGOCIO/SEGUNDA ENTREGA/LEEME.md` | 2 | a8504c1298669724e89a7043edee4bc82697defa01668a0c26de02db2d461fb2 |
-| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/3 - Diagramas del sistema.pdf` | 1158 | 78c350cad61f161efd85b51abc2b6f05550fd3ea66d639aa0cd5dc5075a6e2ba |
-| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/5 - Anexo de trazabilidad del uso de IA.pdf` | 954 | 9ba6d8f03a2e046a9bff02d364344b691146085f2cc81afb34aa8b7d404b8c4c |
-| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Log de prompts - Sistema.docx` | 71 | f1b4d856c9baa660328f79af604939471ac18392f40b42774d1c70b12a936cae |
-| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Log de prompts - Sistema.pdf` | 761 | ca0e22071ccb5b64bb8f599cf327304a3b8f96923c634324ac954e4d3929b60e |
-| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Solucion tecnologica - Entrega 1.docx` | 32442 | d024353d2b181cf1604b7e499274b3a6a2c94613277377bba6ee730ce7a97891 |
-| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Solucion tecnologica - Entrega 1.pdf` | 5829 | 40c530ebfbe923150a47c1901793f115042a5aed3b680f3adc9bd92f620f312d |
+| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/3 - Diagramas del sistema.pdf` | 1158 | a173e1f75e254fa4ae1690df63ed44469728dde5fb4f01db7b63b1488e18c90b |
+| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/5 - Anexo de trazabilidad del uso de IA.pdf` | 954 | a497c69f080481a2d1ecf0d0b23461f73c66a35e0a41637d73bd943881757f97 |
+| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Log de prompts - Sistema.docx` | 71 | a52eb8a7724a762ecc0d8ccf2ffdb0acc489d2e616d247038a92288ad8ea5986 |
+| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Log de prompts - Sistema.pdf` | 764 | 32dae91a8bb598440c1c06c7e826e24f1546fc69aaa88943f7dd0aeb68eda19f |
+| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Solucion tecnologica - Entrega 1.docx` | 32442 | 08d445c01ad7fb6afc72668ff05ab1db9a291c5c3588e3bddcec1821f4cb7553 |
+| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Solucion tecnologica - Entrega 1.pdf` | 5833 | fbf6c2b656c6da175b2763842aa3b1c34919d3fd041195205af9c8a134f837eb |
 | `ENTREGA TECNOLOGIA/SEGUNDA ENTREGA/LEEME.md` | 1 | a09c637570d3ad15c1ce55d67e5dc673a883b0a50798eb6ac57801bafb7e6140 |
 | `LEEME.md` | 2 | 9696eb7cfc20eda7023fdd82408fdffd16949daadfd48e049d3aed517d46953b |
 | `README.md` | 4 | c17f654e18b6eb94c8dc93b9cc7fde30f2060c74a38087f1184fdd25e4048c01 |

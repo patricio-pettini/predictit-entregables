@@ -2,12 +2,15 @@
 
 > PredictIT · Trabajo Final de Ingeniería · Patricio Pettini · B00072710-T1
 
-Tres archivos:
+Cuatro archivos:
 
+- **Documento del Trabajo Final - capítulos 1 a 8** (Word y PDF). El documento
+  principal recortado hasta donde llega esta entrega. Los capítulos 9
+  —factibilidades— y 10 —la solución tecnológica— no van acá.
 - **Plan de negocio - Entrega 1** (Word y PDF). Explica cada uno de los siete
   puntos pedidos y deja escrita la fuente de cada supuesto.
 - **Presupuesto financiero - Entrega 1** (Excel). Diez hojas: las nueve del
-  modelo más una de gráficos. Las celdas recuadradas son las que se cargan a
+  modelo más una de gráficos. Las celdas amarillas son las que se cargan a
   mano; todo lo demás se calcula.
 - **Log de prompts - Negocio** (Word y PDF). Las consultas asistidas por IA que
   produjeron este material: qué decidí, qué corregí, cómo validé cada número y
@@ -23,9 +26,15 @@ cátedra. Ninguno de esos valores se copió a mano —el Word se escribe sobre u
 plantilla que sale del propio documento, y de ahí sale también el logo—, así
 que si el documento cambia de formato, esta entrega lo sigue.
 
-Con una diferencia buscada: van **a un solo color**. Todo el texto en negro,
-negrita sólo en los títulos y tablas sin relleno, en el documento y en el
-libro. La versión con los colores del documento quedó en `version con color/`.
+Eso incluye el color: los títulos llevan el azul del documento y las tablas su
+encabezado celeste, y el libro conserva el color con el que se construyó.
+
+**El libro trae veintitrés gráficos repartidos en dieciséis de sus hojas**, y
+el color de cada pestaña agrupa por bloque: supuestos en azul, ingresos en
+verde, egresos en naranja, inversión e impuestos en gris, resultados en azul
+oscuro y riesgo en rojo. Cada hoja con una serie temporal muestra la suya al
+costado de los datos, en las columnas Q a U; esas columnas son la tabla que
+alimenta el gráfico y no un cálculo aparte.
 
 **Los cuatro años van uno abajo del otro y no al costado.** Cada hoja mensual
 tiene un bloque por año, con los doce meses en las columnas C a N y el total del
