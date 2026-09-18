@@ -20,7 +20,7 @@ Esta carpeta es **sólo la mitad de negocio**. El sistema es otra entrega y est�
 en `ENTREGABLES/ENTREGA TECNOLOGIA/PRIMER ENTREGA/`, con su propio log de prompts; ahí van después el código,
 sus manuales y la documentación técnica.
 
-Los tres salen con el formato del documento del Trabajo Final: misma tipografía,
+Los cuatro salen con el formato del documento del Trabajo Final: misma tipografía,
 mismos tamaños, mismos márgenes y el mismo encabezado con los datos de la
 cátedra. Ninguno de esos valores se copió a mano —el Word se escribe sobre una
 plantilla que sale del propio documento, y de ahí sale también el logo—, así

@@ -1,0 +1,4 @@
+# Los sha-256 de VERSIONES.md se calculan byte a byte sobre lo publicado.
+# Si git normaliza los fines de linea, el clon deja de coincidir con el
+# hash declarado y la verificacion falla en los archivos de texto.
+* -text

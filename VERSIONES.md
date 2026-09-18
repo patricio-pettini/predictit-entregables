@@ -21,13 +21,14 @@ En PowerShell, para un archivo suelto:
 Get-FileHash -Algorithm SHA256 "ENTREGA FINAL\01 - Documento del Trabajo Final v2.pdf"
 ```
 
-## Los 302 archivos
+## Los 303 archivos
 
 | Archivo | KB | sha-256 |
 |---|---|---|
-| `ENTREGA FINAL/01 - Documento del Trabajo Final v2.docx` | 32534 | 1c515a5dd32f5a6f39cec31a288e5f1817727173f9389de766a7e9910757de3d |
-| `ENTREGA FINAL/01 - Documento del Trabajo Final v2.pdf` | 6774 | edb880af1d37b9a0e40dce1a9efdb0e02c042523845d6d8b163e2e6f715380c4 |
-| `ENTREGA FINAL/02 - Presupuesto financiero.xlsx` | 122 | 72e6569f0b9636a29fe8bc0c6d1d229779d35b34141b56a788ebf1b341d515a3 |
+| `.gitattributes` | 1 | cde1e1f7ca111320200c5291d579ee3815bfd5726c350c83e15f7ef7ca383cb1 |
+| `ENTREGA FINAL/01 - Documento del Trabajo Final v2.docx` | 32535 | 5154bbc7c58d8f5076777316d6dcd0cd96ded4cbf880b13f2fd76299797599f0 |
+| `ENTREGA FINAL/01 - Documento del Trabajo Final v2.pdf` | 5969 | 88d89a9408a25f9b153c196e491785ef630a2a225463b92fd04a63cc224e19d4 |
+| `ENTREGA FINAL/02 - Presupuesto financiero.xlsx` | 121 | 9cba8e93fdc7ed5c4f3fdeef5af656f55830d14d605717c9d288478d36a680f5 |
 | `ENTREGA FINAL/03 - Anexo de trazabilidad del uso de IA.docx` | 72 | 6714997d8b8384655033a5a04b8b9d7fc6660ba242b31c23dd92a65fe43b6a61 |
 | `ENTREGA FINAL/03 - Anexo de trazabilidad del uso de IA.pdf` | 954 | a7ae08b7423cbf8a232275a581fc54c5d3b3269038c9e6d0819ddc4e536af7fc |
 | `ENTREGA FINAL/04 - Manuales/1 - Manual de instalación.docx` | 449 | 4bfe72940a48659f437354cd5e719e3b897e67f47f95f0bd448ade362a157422 |
@@ -60,19 +61,19 @@ Get-FileHash -Algorithm SHA256 "ENTREGA FINAL\01 - Documento del Trabajo Final v
 | `ENTREGA FINAL/08 - Presentación de la defensa.pdf` | 989 | 16c947654c34695e60eca093b9b5ad6453fa53582d13d9735a522a5cb291435c |
 | `ENTREGA FINAL/08 - Presentación de la defensa.pptx` | 1092 | e002bd32280c042fc72cd4ad46d14b0b5fdd81d5696f1c149ed4bc0d9fba4b38 |
 | `ENTREGA FINAL/LEEME.md` | 9 | 5be689a429a211228e6562c595f6c270c79bb452f162038cea5c65f7c6e6eb87 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Documento del Trabajo Final - capitulos 1 a 8.docx` | 32454 | 00758f52eff54283f4e0091c6b8ce79cbe726250a3fc20a579cf6c3f05148e84 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Documento del Trabajo Final - capitulos 1 a 8.pdf` | 1661 | e051ef953d7a43faf8e9391cf3fe9064e794860210947739986e0e0f05e65994 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/LEEME.md` | 5 | ad87d1831d46e1ab9d37e8e9bac1e23defbbbdfacd43a423d8cb10a4d15ae629 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.docx` | 86 | a5f149fdd37f38d01a21497ae04337720d3fda63980b5ed6ad6148dfaf011102 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.pdf` | 974 | 25bb55ad39427d650ba83147caf3c754ed3e8d2cf369f74c5da60492f2518f4a |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Plan de negocio - Entrega 1.docx` | 75 | a1af93f83fa01676b978e6addf9e53fbdde369e95900ca4b74982b2613467fe5 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Plan de negocio - Entrega 1.pdf` | 858 | f4dc3cc000e5187d7cece0145124e5b9e66594c600dff649801089153cc81025 |
-| `ENTREGA NEGOCIO/PRIMER ENTREGA/Presupuesto financiero - Entrega 1.xlsx` | 74 | a4c754606f4b4834273e6a7954b6bf13a89f9e013651ed188232edd825a3b1ac |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Documento del Trabajo Final - capitulos 1 a 8.docx` | 221 | e9972a9baacd9b181566e77b40a98f2b72bb9911d485ea33aa35ae123e83b4f5 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Documento del Trabajo Final - capitulos 1 a 8.pdf` | 1142 | 166e586ee7face9313e3069919deeb18c375bda30348257325553bf0600c7b41 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/LEEME.md` | 6 | 5d2e580484dc3d8af859f51e1aacf22c44d30a431c61a166173ed5e7cde343be |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.docx` | 88 | ef709724a8a5dd0ef81ea3be07c494586ef54eeb3109be9db934b80441dfafdd |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Log de prompts - Negocio.pdf` | 655 | c1a8c25334470ae3ae43440cb67268db39a70451b2150b2d53202de925d485c0 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Plan de negocio - Entrega 1.docx` | 76 | d6ba0ad2d291e1cd5b8cb781f3edd3cae61ad0c56e1e718df12f7dd9e5b1b16e |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Plan de negocio - Entrega 1.pdf` | 514 | e124cc92f24bc21eaa076448a739426af14269de8ba5f5a2f4019f98aaf41061 |
+| `ENTREGA NEGOCIO/PRIMER ENTREGA/Presupuesto financiero - Entrega 1.xlsx` | 74 | 2f9961243c0ce94b35da263707f317d61f17218dce436c22d5df1df7028a43b0 |
 | `ENTREGA NEGOCIO/SEGUNDA ENTREGA/LEEME.md` | 2 | a8504c1298669724e89a7043edee4bc82697defa01668a0c26de02db2d461fb2 |
 | `ENTREGA TECNOLOGIA/PRIMER ENTREGA/3 - Diagramas del sistema.pdf` | 1158 | c24d4a49f43f452eed80c351a513728f096a94c190de206e9adc4bdc912c6b3c |
 | `ENTREGA TECNOLOGIA/PRIMER ENTREGA/5 - Anexo de trazabilidad del uso de IA.pdf` | 954 | c39dd1292fd29a1d5f530ad3f7cad97dfd852ebc6fe8d3d37eb6be087140365a |
-| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Log de prompts - Sistema.docx` | 71 | 1a0eb32fb1ef87b55cdd4f9e27054d4b219bae0aef9831437258bf3b8418ae16 |
-| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Log de prompts - Sistema.pdf` | 764 | 5df7c26f481228bedc75fe3e0495313c6721a3f1981497d7eee5c1a7ad54ae64 |
+| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Log de prompts - Sistema.docx` | 72 | 81329870f4fd24f3347882cd1bb4255d2b98c33197d09c9b7bdb830fdb7c2f19 |
+| `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Log de prompts - Sistema.pdf` | 504 | 61a40b989582fe043c123cfc1fa4c4f02a51d5947c7b15ab8a8974c438611677 |
 | `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Solucion tecnologica - Entrega 1.docx` | 32442 | 0bedd9a5942efdc82933e75cd4a16387bf3d012331f637607e12a577292729bb |
 | `ENTREGA TECNOLOGIA/PRIMER ENTREGA/Solucion tecnologica - Entrega 1.pdf` | 5833 | 854c526f812a53367e5aa3f7f7fd83f509d30c647aac0804942c2c0426fa37b1 |
 | `ENTREGA TECNOLOGIA/SEGUNDA ENTREGA/LEEME.md` | 1 | a09c637570d3ad15c1ce55d67e5dc673a883b0a50798eb6ac57801bafb7e6140 |
