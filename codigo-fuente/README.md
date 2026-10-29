@@ -132,12 +132,14 @@ separados a propósito: con un solo trabajo, el primer fallo esconde todo lo dem
 
 ### Usuarios de demo
 
-| Usuario | Contraseña | Perfil |
-|---|---|---|
-| `admin` | `Admin.2026` | Administrador |
-| `tecnico1` · `tecnico2` · `tecnico3` | `Tecnico.2026` | Responsable Técnico |
-| `solicitante` | `Usuario.2026` | Usuario Solicitante |
-| `partner` | `Partner.2026` | Partner (multi-organización) |
+Hay cuatro perfiles de demostración: Administrador (`admin`), Responsable
+Técnico (`tecnico1` a `tecnico3`), Usuario Solicitante (`solicitante`) y
+Partner (`partner`). Conviene entrar con más de uno, porque cada uno ve un
+sistema distinto.
+
+**Las contraseñas no están en el repositorio.** Para generar las tuyas,
+`.\db\cambiar-contrasenas-demo.ps1 -Si`. Las de la instancia publicada están
+en el documento que acompaña la entrega.
 
 ## Entregables
 
@@ -160,11 +162,11 @@ python _armar-entregables.py
 | [Hoja de ruta](docs/gestion/ROADMAP.md) | Calendario, avance por épica y las 92 historias. Es la vista visual: se genera sola desde el backlog |
 | [Plan de sprints](docs/gestion/PLAN-DE-SPRINTS.md) | El detalle: objetivos, criterios de aceptación, defectos y retrospectiva de cada sprint |
 | [Patrones y principios](docs/PATRONES-Y-PRINCIPIOS.md) | Dónde vive cada patrón, con archivo y línea. Y lo que **no** está aplicado |
-| [Decisiones de arquitectura](docs/adr/) | 15 ADR en formato Nygard |
-| [Cambios sobre el TFI](docs/CAMBIOS-DOCUMENTO.md) | Los 72 deltas: sección exacta, qué dice hoy, qué tiene que decir y por qué |
+| [Decisiones de arquitectura](docs/adr/) | 16 ADR en formato Nygard |
+| [Cambios sobre el TFI](docs/CAMBIOS-DOCUMENTO.md) | Los 110 deltas: sección exacta, qué dice hoy, qué tiene que decir y por qué |
 | [**Lo que falta**](docs/PENDIENTE.md) | La respuesta a «¿qué falta?» en un solo lugar, separada por de qué depende cada cosa: lo que espera la devolución, lo que se puede hacer hoy, lo que depende de una fecha, y lo que está declarado y no es deuda |
 | [Revisión de coherencia](docs/AUDITORIA-DE-COHERENCIA.md) | Leer todo lo que se entrega buscando dónde un documento desmiente a otro, o al sistema. 18 hallazgos con su evidencia, y los controles que dejó cada uno |
-| [Trazabilidad de IA](docs/trazabilidad/) | Registro de uso y los 23 prompts críticos con su validación |
+| [Trazabilidad de IA](docs/trazabilidad/) | Registro de uso y los 25 prompts críticos con su validación |
 
 El backlog vive en [`docs/gestion/backlog.json`](docs/gestion/backlog.json) y es la
 fuente única: de ahí salen la hoja de ruta, el tablero de Trello y los issues de

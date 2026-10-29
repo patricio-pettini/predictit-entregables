@@ -110,8 +110,7 @@ public class SeguridadService : ISeguridadService
 
         var contexto = new ContextoSesion(
             usuario.Id, usuario.Username, idOrganizacion.Value,
-            usuario.ObtenerPatentes().Select(p => p.DataKey),
-            usuario.IdIdioma);
+            PatentesDeLaSesion(usuario), usuario.IdIdioma);
 
         _dao.Usuarios.RegistrarAccesoExitoso(usuario.Id);
         RederivarSiHaceFalta(usuario, contrasena);
@@ -168,9 +167,21 @@ public class SeguridadService : ISeguridadService
         if (!usuario.PuedeOperarSobre(idOrganizacion)) return null;
 
         return new ContextoSesion(usuario.Id, usuario.Username, idOrganizacion,
-                                  usuario.ObtenerPatentes().Select(p => p.DataKey),
-                                  usuario.IdIdioma);
+                                  PatentesDeLaSesion(usuario), usuario.IdIdioma);
     }
+
+    /// <summary>
+    /// Las patentes con que opera la sesión. Con la contraseña temporal del alta
+    /// todavía sin cambiar, ninguna: así toda operación protegida responde 403
+    /// sin que cada controlador tenga que saberlo, y lo único que queda
+    /// disponible es lo que no pide patente —la sesión, el cierre y el cambio de
+    /// contraseña—. Es la garantía del lado del servidor; la pantalla que obliga
+    /// a cambiarla es la comodidad del lado del usuario.
+    /// </summary>
+    private static IEnumerable<string> PatentesDeLaSesion(Usuario usuario) =>
+        usuario.DebeCambiarContrasena
+            ? Array.Empty<string>()
+            : usuario.ObtenerPatentes().Select(p => p.DataKey);
 
     public IReadOnlyCollection<Patente> PatentesDe(Guid idUsuario)
     {

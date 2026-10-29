@@ -129,6 +129,11 @@ public abstract class SqlHelperBase
         return cmd.ExecuteNonQuery();
     }
 
+    // CA2100 no puede ver más allá de este método: para el analizador, `sql`
+    // es texto que llega de afuera. Llega de una constante de cada DAO, con los
+    // valores en SqlParameter; el ayudante no arma SQL, lo ejecuta.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100",
+        Justification = "El texto es siempre una constante del DAO; los valores van como SqlParameter.")]
     private static SqlCommand Comando(SqlConnection cn, SqlTransaction? tx, string sql,
                                       SqlParameter[] parametros)
     {

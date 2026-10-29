@@ -6,6 +6,11 @@ Alumno: Pettini, Patricio Ezequiel (B00072710-T1).
 
 ## Al arrancar la sesión
 
+0. **`python _estado.py --sincronizar`.** El proyecto se trabaja desde dos
+   computadoras y versiona 138 binarios que git no sabe fusionar: si el mismo
+   `.docx` se toca en las dos, el conflicto se resuelve eligiendo uno y
+   perdiendo el otro. El comando dice si esta máquina está al día y cuál es el
+   siguiente paso. **Antes de tocar nada.**
 1. Leé `docs/CAMBIOS-DOCUMENTO.md`. Registra en qué se aparta el sistema del TFI
    y por qué. **Se actualiza en el momento**, no al final.
 1b. Leé `docs/adr/README.md`. Las decisiones de arquitectura ya tomadas no se
@@ -53,8 +58,29 @@ docker compose up -d          # SQL Server 2022
 cd backend; dotnet test       # tiene que dar todo verde
 ```
 
-Usuarios de demo: `admin / Admin.2026`, `tecnico1..3 / Tecnico.2026`,
-`solicitante / Usuario.2026`, `partner / Partner.2026`.
+Y para dejar la demostración como recién instalada —el sistema está publicado
+en internet con usuarios de prueba, así que alguien puede romperla—:
+
+```powershell
+.\db\restaurar-demo.ps1       # muestra el plan y no toca nada
+.\db\restaurar-demo.ps1 -Si   # borra las dos bases y las rehace
+```
+
+`aplicar.ps1` **no** sirve para eso: sus scripts sólo insertan lo que falta,
+así que no revierten lo que alguien haya borrado o cambiado.
+
+Y para que las credenciales del sistema publicado dejen de ser las del seed
+—que están en un repositorio público—:
+
+```powershell
+.\db\cambiar-contrasenas-demo.ps1 -Si
+```
+
+Genera contraseñas nuevas, las escribe en `db/credenciales-nuevas.txt`
+—ignorado por git— y actualiza los hashes. **Después hay que copiarlas al
+documento de la entrega y al mensaje, o el profesor no puede entrar.**
+
+Usuarios de demo: `admin`, `tecnico1..3`, `solicitante` y `partner`. Las contraseñas no están en el repositorio —es público y el sistema está desplegado—: se generan con `.\db\cambiar-contrasenas-demo.ps1 -Si` y las de la instancia publicada están en el documento de la entrega.
 
 ## Entregables de transparencia (obligatorios, no opcionales)
 
@@ -92,6 +118,18 @@ de carga con perfil definido, y perfilado de memoria bajo carga sostenida.
 - **Pushear a `origin/main` después de cada commit.** El remoto es
   `https://github.com/PatricioPettini/trabajo-final-ingenier-a.git` y el usuario
   pidió que todo el trabajo quede ahí. No hace falta confirmar cada push.
+- **Antes de cada push, `python _estado.py`.** Regenera `ESTADO.md`, que es el
+  archivo que se abre primero al retomar el proyecto en otra computadora: en qué
+  quedó el trabajo, qué sigue y cómo levantarlo, con los recuentos sacados de la
+  última corrida y no escritos a mano. Si cambió el rumbo, actualizar además
+  `DONDE_QUEDAMOS` adentro del guion, que es lo único de ese archivo que ningún
+  recuento puede deducir.
+- **Un `.docx` que se tocó en las dos máquinas no se pierde.** Git obliga a
+  elegir uno para el árbol de trabajo, pero las dos versiones siguen en el
+  historial: `python _comparar-docx.py <ruta> [ref-a] [ref-b]` las saca y le
+  pide a Word que las compare, y deja un tercero con control de cambios para
+  aceptar o rechazar diferencia por diferencia. Con `--conflicto` compara los
+  dos lados de un merge abierto.
 - **Preferir editar archivos existentes** antes que crear nuevos.
 - **Comentarios: el "por qué", no el "qué".** Sólo cuando la razón no es obvia.
 - Cualquier operación destructiva (`git reset --hard`, `rm -rf`, `DROP`):
@@ -105,7 +143,7 @@ de carga con perfil definido, y perfilado de memoria bajo carga sostenida.
 
 ```
 TFI/
-├─ db/                 esquemas, datos iniciales y aplicar.ps1
+├─ db/                 esquemas, datos iniciales y los tres .ps1 de base
 ├─ backend/            PredictIT.sln (Domain, DAO, BLL, Service, Api, Tests)
 ├─ frontend/           React 19 + TypeScript + Vite
 ├─ docs/               CAMBIOS-DOCUMENTO.md y documentación técnica

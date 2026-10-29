@@ -19,7 +19,13 @@ public record SesionDto(
     OrganizacionDto Organizacion,
     IReadOnlyCollection<OrganizacionDto> OrganizacionesDisponibles,
     string Token,
-    DateTime Expira);
+    DateTime Expira,
+    // Con la contraseña temporal del alta: la pantalla obliga a cambiarla, y la
+    // sesión no trae patentes hasta que se cambie.
+    bool DebeCambiarContrasena = false);
+
+/// <summary>Cambio de la contraseña propia: la actual y la nueva.</summary>
+public record CambioContrasenaDto(string Actual, string Nueva);
 
 public record OrganizacionDto(
     Guid Id,

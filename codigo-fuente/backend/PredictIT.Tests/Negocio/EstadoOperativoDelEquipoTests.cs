@@ -21,12 +21,13 @@ namespace PredictIT.Tests.Negocio;
 public class EstadoOperativoDelEquipoTests
 {
     private readonly EquipoDaoFalso _equipos = new();
+    private readonly IncidenciaDaoFalso _incidencias = new();
     private readonly ContextoFalso _contexto = new();
     private readonly BitacoraFalsa _bitacora = new();
     private readonly PrediccionFalsa _prediccion = new();
 
     private EquipoBusiness Negocio() => new(
-        new FabricaFalsa(new IncidenciaDaoFalso(), new CatalogoDaoFalso(), _equipos),
+        new FabricaFalsa(_incidencias, new CatalogoDaoFalso(), _equipos),
         new FabricaSeguridadFalsa(new UsuarioDaoFalso()), _contexto, _bitacora,
         prediccion: () => _prediccion);
 
@@ -151,6 +152,25 @@ public class EstadoOperativoDelEquipoTests
         _equipos.Borrados.Should().ContainSingle().Which.Should().Be(id);
         _bitacora.Eventos.Should().ContainSingle()
                  .Which.Descripcion.Should().Contain("NB-COM-007");
+    }
+
+    [Fact]
+    public void No_se_da_de_baja_un_equipo_con_incidencias_abiertas()
+    {
+        // La pantalla lo promete y el cambio de estado deriva acá justamente
+        // por esta validación: sin ella la baja dejaba incidencias abiertas
+        // colgando de un equipo que ya no aparece en el inventario.
+        var id = UnEquipoOperativo();
+        _incidencias.Agregar(new Incidencia { Id = Guid.NewGuid(), IdEquipo = id, Numero = 41 });
+        _incidencias.Agregar(new Incidencia { Id = Guid.NewGuid(), IdEquipo = id, Numero = 42 });
+        _contexto.Con(Patentes.EquipoGestionar);
+
+        Negocio().Invoking(n => n.DarDeBaja(id))
+                 .Should().Throw<BusinessException>()
+                 .Which.Message.Should().Contain("2 incidencias abiertas");
+
+        _equipos.Borrados.Should().BeEmpty();
+        _bitacora.Eventos.Should().BeEmpty();
     }
 
     [Fact]

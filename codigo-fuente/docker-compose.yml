@@ -36,8 +36,21 @@ services:
       # Los backups del sistema (RespaldoService) se escriben acá adentro del
       # contenedor y quedan visibles en el host para poder mostrarlos.
       - ./backups:/var/opt/mssql/backups
+    # El healthcheck pregunta por lo que las migraciones necesitan, y no solo
+    # por si el motor contesta.
+    #
+    # Antes era `SELECT 1` contra master, y master contesta mientras las bases
+    # de usuario todavia estan recuperandose. Con el volumen ya poblado -o sea,
+    # en cualquier arranque que no sea el primero- el contenedor se declaraba
+    # sano, `aplicar.sh` arrancaba y SQL Server cortaba con «Database 5 cannot
+    # be autostarted during server shutdown or startup». El segundo intento
+    # andaba, que es lo que hace que un defecto asi sobreviva: parece cosa de
+    # una vez.
+    #
+    # `-b` es lo que hace que sqlcmd devuelva codigo distinto de cero cuando el
+    # RAISERROR dispara; sin eso el error se imprime y el healthcheck pasa igual.
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -b -Q \"SET NOCOUNT ON; IF EXISTS (SELECT 1 FROM sys.databases WHERE state_desc <> 'ONLINE') RAISERROR('bases en recuperacion', 16, 1);\" || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -118,6 +131,9 @@ services:
       # importa es el del frontend.
       Cors__Origenes__0: "http://localhost:8080"
       Respaldos__RutaContenedor: "/var/opt/mssql/backups"
+      # Respaldo automatico de las dos bases: uno por dia, el primero media hora
+      # despues de arrancar. Con 0 no corre.
+      Respaldos__HorasEntreRespaldos: "${PREDICTIT_HORAS_RESPALDO:-24}"
       # Corre como Production, que es lo correcto para un contenedor, y aun asi
       # expone Swagger: declararlo Development para conseguirlo cambiaria tambien
       # el manejo de errores y las paginas de excepcion.

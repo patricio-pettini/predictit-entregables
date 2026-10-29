@@ -83,6 +83,13 @@ public interface IAutenticacionBusiness
     SesionDto IniciarSesion(string username, string contrasena, string? ip);
 
     SesionDto CambiarOrganizacion(Guid idOrganizacion);
+
+    /// <summary>
+    /// Cambia la contraseña de quien está en sesión, verificando la actual. Es
+    /// el paso obligatorio después del alta y lo que levanta la marca de
+    /// contraseña temporal.
+    /// </summary>
+    void CambiarContrasena(CambioContrasenaDto entrada, string? ip);
     SesionDto SesionActual();
 }
 
@@ -342,6 +349,15 @@ public interface IUsuarioBusiness
     void CambiarEstadoUsuario(Guid id, bool activo);
     void DesbloquearUsuario(Guid id);
     void AsignarRoles(Guid id, IReadOnlyList<Guid> idsRol);
+
+    /// <summary>
+    /// Alta de un usuario en la organización de la sesión, con una contraseña
+    /// temporal que se devuelve una sola vez y obliga a cambiarla al entrar.
+    /// </summary>
+    UsuarioCreadoDto CrearUsuario(UsuarioEntradaDto entrada);
+
+    /// <summary>Modifica nombre, apellido, correo y teléfono.</summary>
+    void ActualizarUsuario(Guid id, DatosUsuarioDto datos);
 }
 
 /// <summary>
@@ -386,6 +402,12 @@ public interface IRespaldoBusiness
 
     /// <summary>Respalda una base y registra el resultado, haya salido bien o mal.</summary>
     RespaldoDto Respaldar(string nombreBase);
+
+    /// <summary>
+    /// Respalda las dos bases como respaldo automático, sin usuario. Lo llama
+    /// el servicio en segundo plano con el contexto de sistema de respaldos.
+    /// </summary>
+    IReadOnlyList<RespaldoDto> RespaldoProgramado();
 
     /// <summary>
     /// Restaura un respaldo por su identificador (Req. Arq. 003).

@@ -12,7 +12,7 @@ sirve de referencia y por eso no está acá.
 | `ENTREGA TECNOLOGIA/PRIMER ENTREGA` | La base del sistema: arquitectura, seguridad, bitácora, trazabilidad, multiidioma y el código fuente | **15/09/2026** |
 | `ENTREGA NEGOCIO/PRIMER ENTREGA` | El plan de negocio y el presupuesto financiero | **18/09/2026** |
 | `ENTREGA NEGOCIO/SEGUNDA ENTREGA` | El plan corregido con la devolución de la primera | **16/10/2026** |
-| `ENTREGA TECNOLOGIA/SEGUNDA ENTREGA` | El sistema avanzado | fecha por confirmar con la cátedra |
+| `ENTREGA TECNOLOGIA/SEGUNDA ENTREGA` | El sistema completo y desplegado: el capítulo 10 revisado contra el código, el código fuente, la documentación técnica y el log de prompts | **20/10/2026** |
 | `ENTREGA FINAL` | El paquete completo: documento, manuales, documentación técnica, gestión y defensa | **11/11/2026** |
 
 Todas se arman con un comando y ninguna se edita a mano:

@@ -103,4 +103,56 @@ public class AislamientoOrganizacionTests
 
         estudio.Should().BeEquivalentTo(clinica);
     }
+
+    // Los dos módulos de la segunda entrega. Los comprobantes son el dato más
+    // sensible que el sistema agregó —cuánto paga cada cliente—, y la agenda y
+    // sus planes viven en tablas propias con sus propias consultas: el filtro
+    // de equipos no los cubre.
+
+    [Fact]
+    public void Los_comprobantes_y_sus_lineas_son_de_la_organizacion()
+    {
+        var delEstudio = Como(Datos.Estudio).Facturacion.Buscar(null, null);
+        delEstudio.Should().NotBeEmpty("la demostración factura los meses anteriores del Estudio");
+        delEstudio.Should().OnlyContain(c => c.IdOrganizacion == Datos.Estudio);
+
+        var clinica = Como(Datos.Clinica).Facturacion;
+        clinica.Buscar(null, null).Should().OnlyContain(c => c.IdOrganizacion == Datos.Clinica);
+
+        var ajeno = delEstudio[0];
+        Como(Datos.Estudio).Facturacion.Lineas(ajeno.Id).Should().NotBeEmpty();
+
+        clinica.PorId(ajeno.Id).Should().BeNull();
+        clinica.Lineas(ajeno.Id).Should().BeEmpty();
+
+        // El mismo período puede estar facturado en la Clínica: lo que no puede
+        // pasar es que la consulta devuelva el del Estudio.
+        var mismoPeriodo = clinica.PorPeriodo(ajeno.Periodo);
+        if (mismoPeriodo is not null)
+        {
+            mismoPeriodo.IdOrganizacion.Should().Be(Datos.Clinica);
+        }
+    }
+
+    [Fact]
+    public void Los_planes_y_la_agenda_de_mantenimiento_son_de_la_organizacion()
+    {
+        var estudio = Como(Datos.Estudio).MantenimientosProgramados;
+        var planes = estudio.Planes();
+        var agenda = estudio.Buscar(null, null);
+
+        planes.Should().NotBeEmpty("la demostración trae tres planes del Estudio");
+        agenda.Should().NotBeEmpty();
+        planes.Should().OnlyContain(p => p.IdOrganizacion == Datos.Estudio);
+        agenda.Should().OnlyContain(m => m.IdOrganizacion == Datos.Estudio);
+
+        var clinica = Como(Datos.Clinica).MantenimientosProgramados;
+        clinica.Planes().Should().OnlyContain(p => p.IdOrganizacion == Datos.Clinica);
+        clinica.Buscar(null, null).Should().OnlyContain(m => m.IdOrganizacion == Datos.Clinica);
+        clinica.PendientesDeLaOrganizacion().Should().OnlyContain(m => m.IdOrganizacion == Datos.Clinica);
+
+        clinica.PlanPorId(planes[0].Id).Should().BeNull();
+        clinica.PorId(agenda[0].Id).Should().BeNull();
+        clinica.EquiposAlcanzados(planes[0].Id).Should().BeEmpty();
+    }
 }

@@ -1,13 +1,183 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useFormato } from '../idioma/formato';
 import { useT } from '../idioma/IdiomaContext';
 import { api, ErrorApi } from '../api/cliente';
-import type { RolDto, UsuarioDetalleDto, UsuarioListaDto } from '../api/tipos';
+import type { RolDto, UsuarioCreadoDto, UsuarioDetalleDto, UsuarioListaDto } from '../api/tipos';
 import { Patentes } from '../api/tipos';
 import { Encabezado } from '../componentes/Layout';
 import { EsqueletoTabla, SinDatos } from '../componentes/Estados';
 import { IconoBuscar } from '../componentes/Iconos';
 import { useCerrarSiExpiro, useSesion } from '../sesion/SesionContext';
+
+/** Los campos de un usuario, compartidos por el alta y la edición. */
+function CamposDeUsuario({
+  datos,
+  onCambio,
+  conUsuario,
+}: {
+  datos: { nombre: string; apellido: string; email: string; telefono: string; username?: string };
+  onCambio: (d: Partial<{ nombre: string; apellido: string; email: string; telefono: string; username: string }>) => void;
+  conUsuario?: boolean;
+}) {
+  const t = useT();
+  const campo = (etiqueta: string, valor: string, cambio: (v: string) => void,
+                 extra: { tipo?: string; requerido?: boolean; ayuda?: string } = {}) => (
+    <label style={{ flex: '1 1 200px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+      <span className="sub">{etiqueta}</span>
+      <input className="campo" type={extra.tipo ?? 'text'} value={valor} required={extra.requerido}
+             aria-label={etiqueta} autoComplete="off" onChange={(e) => cambio(e.target.value)} />
+      {extra.ayuda ? <span className="sub">{extra.ayuda}</span> : null}
+    </label>
+  );
+
+  return (
+    <>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        {campo(t('usuario.nombre', 'Nombre'), datos.nombre, (v) => onCambio({ nombre: v }), { requerido: true })}
+        {campo(t('usuario.apellido', 'Apellido'), datos.apellido, (v) => onCambio({ apellido: v }), { requerido: true })}
+      </div>
+      {conUsuario
+        ? campo(t('login.usuario', 'Usuario'), datos.username ?? '', (v) => onCambio({ username: v }), {
+            requerido: true,
+            ayuda: t('usuario.usuarioAyuda', 'Con el que entra. Sin espacios ni acentos: letras, números, punto o guion.'),
+          })
+        : null}
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        {campo(t('comun.correo', 'Correo'), datos.email, (v) => onCambio({ email: v }), { tipo: 'email', requerido: true })}
+        {campo(t('usuario.telefono', 'Teléfono'), datos.telefono, (v) => onCambio({ telefono: v }), { tipo: 'tel' })}
+      </div>
+    </>
+  );
+}
+
+/**
+ * Alta de un usuario (RF-02, CU-002).
+ *
+ * La contraseña no se escribe acá: la genera el sistema, se muestra una sola
+ * vez y la persona la tiene que cambiar al entrar. Así quien da de alta la
+ * cuenta no conoce la contraseña con la que la persona va a trabajar.
+ */
+function NuevoUsuario({
+  roles,
+  onCreado,
+  onCancelar,
+}: {
+  roles: RolDto[];
+  onCreado: (creado: UsuarioCreadoDto) => void;
+  onCancelar: () => void;
+}) {
+  const t = useT();
+  const cerrarSiExpiro = useCerrarSiExpiro();
+  const [datos, setDatos] = useState({ nombre: '', apellido: '', email: '', telefono: '', username: '' });
+  const [elegidos, setElegidos] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
+
+  // El perfil Partner lo habilita la plataforma y no una organización: la API
+  // lo rechaza igual, pero ofrecerlo sería ofrecer algo que no se puede hacer.
+  const asignables = roles.filter((r) => r.nombre !== 'PARTNER');
+
+  function enviar(e: FormEvent) {
+    e.preventDefault();
+    setEnviando(true);
+    setError(null);
+    api.usuarios
+      .crear({ ...datos, telefono: datos.telefono || null, idsRol: elegidos })
+      .then(onCreado)
+      .catch((ex) => {
+        cerrarSiExpiro(ex);
+        setError(ex instanceof ErrorApi ? ex.message : t('usuario.noSeCreo', 'No se pudo dar de alta el usuario.'));
+      })
+      .finally(() => setEnviando(false));
+  }
+
+  return (
+    <form className="tarjeta" onSubmit={enviar}>
+      <header>
+        <h2>{t('usuario.nuevo', 'Nuevo usuario')}</h2>
+      </header>
+      <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <CamposDeUsuario datos={datos} conUsuario onCambio={(d) => setDatos({ ...datos, ...d })} />
+
+        <div>
+          <div className="sub" style={{ marginBottom: 6 }}>{t('usuario.roles', 'Roles')}</div>
+          {asignables.map((r) => (
+            <label key={r.id} style={{ display: 'flex', gap: 9, alignItems: 'flex-start', marginBottom: 6 }}>
+              <input
+                type="checkbox"
+                checked={elegidos.includes(r.id)}
+                onChange={(e) =>
+                  setElegidos((prev) => (e.target.checked ? [...prev, r.id] : prev.filter((x) => x !== r.id)))
+                }
+                style={{ marginTop: 3 }}
+              />
+              <span>
+                <span style={{ fontSize: 'var(--txt-tabla)' }}>{r.nombre}</span>
+                <span className="sub" style={{ display: 'block' }}>{r.descripcion ?? ''}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+
+        <p className="sub">
+          {t('usuario.altaContrasenaNota', 'La contraseña la genera el sistema y se muestra una sola vez. Al entrar, la persona tiene que cambiarla: hasta entonces la cuenta no tiene ningún permiso.')}
+        </p>
+
+        {error ? <div className="aviso error" role="alert">{error}</div> : null}
+
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button type="submit" className="btn pri" disabled={enviando || elegidos.length === 0}>
+            {enviando ? t('comun.guardando', 'Guardando…') : t('usuario.darDeAlta', 'Dar de alta')}
+          </button>
+          <button type="button" className="btn" onClick={onCancelar} disabled={enviando}>
+            {t('comun.cancelar', 'Cancelar')}
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+/** La contraseña temporal recién generada. Es la única vez que se ve. */
+function UsuarioCreado({ creado, onListo }: { creado: UsuarioCreadoDto; onListo: () => void }) {
+  const t = useT();
+  const [copiada, setCopiada] = useState(false);
+
+  function copiar() {
+    navigator.clipboard?.writeText(creado.contrasenaTemporal).then(() => setCopiada(true)).catch(() => {});
+  }
+
+  return (
+    <div className="tarjeta">
+      <header>
+        <h2>{t('usuario.creado', 'Usuario creado')}</h2>
+      </header>
+      <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <dl className="dl">
+          <dt>{t('login.usuario', 'Usuario')}</dt>
+          <dd className="mono">{creado.username}</dd>
+          <dt>{t('contrasena.temporal', 'Contraseña temporal')}</dt>
+          <dd>
+            <span className="mono" style={{ fontSize: 'var(--txt-seccion)', letterSpacing: '1px' }}>
+              {creado.contrasenaTemporal}
+            </span>
+          </dd>
+        </dl>
+        <div className="aviso atencion">
+          {t('usuario.temporalUnaVez', 'Es la única vez que se muestra: el sistema no la guarda en claro. Pasásela a la persona por un canal seguro. Al entrar, el sistema le va a pedir que la reemplace por una propia.')}
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button type="button" className="btn" onClick={copiar}>
+            {copiada ? t('comun.copiada', 'Copiada') : t('comun.copiar', 'Copiar')}
+          </button>
+          <button type="button" className="btn pri" onClick={onListo}>
+            {t('comun.listo', 'Listo')}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /** Panel lateral con el detalle del usuario y la edición de sus roles. */
 function Detalle({
@@ -30,6 +200,8 @@ function Detalle({
   const [elegidos, setElegidos] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
+  const [editando, setEditando] =
+    useState<{ nombre: string; apellido: string; email: string; telefono: string } | null>(null);
 
   const cargar = useCallback(() => {
     setError(null);
@@ -63,6 +235,25 @@ function Detalle({
       .finally(() => setGuardando(false));
   }
 
+  function guardarDatos(e: FormEvent) {
+    e.preventDefault();
+    if (!editando) return;
+    setGuardando(true);
+    setError(null);
+    api.usuarios
+      .actualizar(id, { ...editando, telefono: editando.telefono || null })
+      .then(() => {
+        setEditando(null);
+        cargar();
+        onCambio();
+      })
+      .catch((ex) => {
+        cerrarSiExpiro(ex);
+        setError(ex instanceof ErrorApi ? ex.message : t('error.operacion', 'No se pudo completar la operación.'));
+      })
+      .finally(() => setGuardando(false));
+  }
+
   if (!detalle) {
     return (
       <div className="tarjeta">
@@ -85,10 +276,43 @@ function Detalle({
       <div className="tarjeta">
         <header>
           <h2>{u.nombreCompleto}</h2>
-          <button type="button" className="btn plano" onClick={onCerrar}>
-            {t('comun.cerrar', 'Cerrar')}
-          </button>
+          <span style={{ display: 'inline-flex', gap: 6 }}>
+            {puede(Patentes.usuarioGestionar) && !editando ? (
+              <button
+                type="button"
+                className="btn plano"
+                onClick={() =>
+                  setEditando({
+                    nombre: u.nombre ?? '',
+                    apellido: u.apellido ?? '',
+                    email: u.email,
+                    telefono: u.telefono ?? '',
+                  })
+                }
+              >
+                {t('comun.editar', 'Editar')}
+              </button>
+            ) : null}
+            <button type="button" className="btn plano" onClick={onCerrar}>
+              {t('comun.cerrar', 'Cerrar')}
+            </button>
+          </span>
         </header>
+
+        {editando ? (
+          <form onSubmit={guardarDatos} style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <CamposDeUsuario datos={editando} onCambio={(d) => setEditando({ ...editando, ...d })} />
+            {error ? <div className="aviso error" role="alert">{error}</div> : null}
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button type="submit" className="btn pri" disabled={guardando}>
+                {guardando ? t('comun.guardando', 'Guardando…') : t('comun.guardar', 'Guardar')}
+              </button>
+              <button type="button" className="btn" onClick={() => setEditando(null)} disabled={guardando}>
+                {t('comun.cancelar', 'Cancelar')}
+              </button>
+            </div>
+          </form>
+        ) : null}
 
         <dl className="dl">
           <dt>{t('login.usuario', 'Usuario')}</dt>
@@ -223,8 +447,13 @@ export function Usuarios() {
   const [roles, setRoles] = useState<RolDto[]>([]);
   const [texto, setTexto] = useState('');
   const [elegido, setElegido] = useState<string | null>(null);
+  const [creando, setCreando] = useState(false);
+  const [creado, setCreado] = useState<UsuarioCreadoDto | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState(false);
+  const { puede } = useSesion();
+  // Dar de alta es también asignar roles: hacen falta las dos patentes.
+  const puedeDarDeAlta = puede(Patentes.usuarioGestionar) && puede(Patentes.rolGestionar);
 
   const cargar = useCallback(() => {
     setError(null);
@@ -287,7 +516,25 @@ export function Usuarios() {
 
   return (
     <>
-      <Encabezado titulo={t('usuario.titulo', 'Usuarios')} contexto={contexto} />
+      <Encabezado
+        titulo={t('usuario.titulo', 'Usuarios')}
+        contexto={contexto}
+        acciones={
+          puedeDarDeAlta ? (
+            <button
+              type="button"
+              className="btn pri"
+              disabled={!!creado}
+              onClick={() => {
+                setCreando((v) => !v);
+                setElegido(null);
+              }}
+            >
+              {creando ? t('comun.cancelar', 'Cancelar') : t('usuario.nuevo', 'Nuevo usuario')}
+            </button>
+          ) : null
+        }
+      />
 
       <div className="cuerpo pagina-usuarios">
         {error ? (
@@ -311,7 +558,7 @@ export function Usuarios() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: elegido ? 'minmax(0, 1fr) 400px' : '1fr',
+            gridTemplateColumns: elegido || creando || creado ? 'minmax(0, 1fr) 400px' : '1fr',
             gap: 16,
           }}
         >
@@ -351,7 +598,10 @@ export function Usuarios() {
                           type="button"
                           className="btn plano"
                           style={{ padding: 0, height: 'auto' }}
-                          onClick={() => setElegido(u.id)}
+                          onClick={() => {
+                            setElegido(u.id);
+                            setCreando(false);
+                          }}
                         >
                           <span className="mono">{u.username}</span>
                         </button>
@@ -410,12 +660,27 @@ export function Usuarios() {
               ) : null}
             </div>
 
-            <p className="sub" style={{ marginTop: 10 }}>
-              {t('usuario.altaDesdeBaseNota', 'El alta de usuarios se hace desde la base de datos: crear una cuenta implica establecer una contraseña, y hacerlo desde una pantalla sin un circuito de invitación por correo dejaría la contraseña inicial en manos de quien la crea.')}
-            </p>
           </div>
 
-          {elegido ? (
+          {creado ? (
+            <UsuarioCreado
+              creado={creado}
+              onListo={() => {
+                setCreado(null);
+                cargar();
+              }}
+            />
+          ) : creando ? (
+            <NuevoUsuario
+              roles={roles}
+              onCreado={(c) => {
+                setCreando(false);
+                setCreado(c);
+                cargar();
+              }}
+              onCancelar={() => setCreando(false)}
+            />
+          ) : elegido ? (
             <Detalle
               id={elegido}
               roles={roles}

@@ -137,7 +137,8 @@ public class UsuarioMapper : IObjectMapper<Usuario>
         FechaAlta = f.Fecha("fecha_alta"),
         UltimoAcceso = f.FechaNula("ultimo_acceso"),
         IdOrganizacion = f.GuidNulo("id_organizacion"),
-        IdIdioma = f.GuidNulo("id_idioma")
+        IdIdioma = f.GuidNulo("id_idioma"),
+        DebeCambiarContrasena = f.Booleano("debe_cambiar_contrasena")
     };
 }
 

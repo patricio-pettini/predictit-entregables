@@ -176,6 +176,27 @@ public class UsuariosController(IFactoryBusiness negocio) : ControllerBase
     public ActionResult<UsuarioDetalleDto> Detalle(Guid id) =>
         Ok(negocio.Usuarios.Usuario(id));
 
+    /// <summary>
+    /// Alta de un usuario en la organización (RF-02, CU-002). Devuelve la
+    /// contraseña temporal una sola vez; el usuario tiene que cambiarla al
+    /// entrar. Pide las dos patentes porque dar de alta es también dar roles.
+    /// </summary>
+    [HttpPost]
+    [RequierePatente(Patentes.UsuarioGestionar)]
+    public ActionResult<UsuarioCreadoDto> Crear([FromBody] UsuarioEntradaDto entrada)
+    {
+        var creado = negocio.Usuarios.CrearUsuario(entrada);
+        return CreatedAtAction(nameof(Detalle), new { id = creado.Id }, creado);
+    }
+
+    [HttpPut("{id:guid}")]
+    [RequierePatente(Patentes.UsuarioGestionar)]
+    public IActionResult Actualizar(Guid id, [FromBody] DatosUsuarioDto datos)
+    {
+        negocio.Usuarios.ActualizarUsuario(id, datos);
+        return NoContent();
+    }
+
     [HttpPut("{id:guid}/estado")]
     [RequierePatente(Patentes.UsuarioGestionar)]
     public IActionResult CambiarEstado(Guid id, [FromQuery] bool activo)

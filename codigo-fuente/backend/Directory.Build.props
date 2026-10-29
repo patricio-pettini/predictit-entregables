@@ -19,4 +19,28 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
+  <!--
+    Análisis estático (ADR 0008, RNF-08).
+
+    Una advertencia rompe la compilación, también en esta máquina y no sólo en
+    el CI, que ya compilaba con -warnaserror.
+
+    Encima del conjunto por defecto van tres reglas dirigidas a los riesgos de
+    haber elegido ADO.NET (ADR 0004), que por defecto no están activas: SQL
+    armado por concatenación y conexiones o lectores sin liberar. Están en
+    `analizadores.globalconfig`.
+
+    AnalysisMode=All se midió el 23/10: unas 730 advertencias, casi todas de
+    convenciones que el proyecto no sigue a propósito —los nombres de las
+    pruebas con guiones bajos, ConfigureAwait en una aplicación ASP.NET Core—.
+    Activarlo obligaba a suprimirlas en bloque, que es tener el control sin
+    tenerlo.
+  -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildThisFileDirectory)analizadores.globalconfig" />
+  </ItemGroup>
+
 </Project>

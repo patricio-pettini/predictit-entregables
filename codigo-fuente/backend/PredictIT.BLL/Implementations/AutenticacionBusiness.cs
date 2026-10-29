@@ -84,6 +84,38 @@ public class AutenticacionBusiness : IAutenticacionBusiness
         return Armar(usuario, contexto);
     }
 
+    public void CambiarContrasena(CambioContrasenaDto entrada, string? ip)
+    {
+        // No pide patente: es lo único que puede hacer quien entró con la
+        // contraseña temporal. Pide, en cambio, una sesión válida.
+        if (_contexto.IdUsuario == Guid.Empty)
+            throw new BusinessException("La sesión no es válida.");
+
+        var usuario = _daoSeguridad.Usuarios.GetById(_contexto.IdUsuario)
+                      ?? throw new BusinessException("La sesión no es válida.");
+
+        // La actual se verifica aunque la sesión sea válida: un token robado o
+        // una pantalla abierta no alcanzan para quedarse con la cuenta.
+        if (!HashContrasena.Verificar(entrada.Actual ?? string.Empty, usuario.PasswordHash))
+            throw BusinessException.De("actual", "La contraseña actual no es correcta.");
+
+        var nueva = entrada.Nueva ?? string.Empty;
+        var motivo = PoliticaDeContrasena.Validar(nueva, usuario.Username);
+        if (motivo is not null)
+            throw BusinessException.De("nueva", motivo);
+
+        if (nueva == entrada.Actual)
+            throw BusinessException.De("nueva", "La contraseña nueva tiene que ser distinta de la actual.");
+
+        _daoSeguridad.Usuarios.EstablecerContrasena(usuario.Id, HashContrasena.Derivar(nueva), debeCambiar: false);
+
+        _bitacora.Registrar(TipoEvento.Codigos.Modificacion,
+            usuario.DebeCambiarContrasena
+                ? $"{usuario.Username} reemplazó la contraseña temporal del alta."
+                : $"{usuario.Username} cambió su contraseña.",
+            usuario.Id, _contexto.IdOrganizacion, "Usuario", usuario.Id, ip);
+    }
+
     public void CerrarSesion(string? ip)
     {
         // Sin sesión no hay nada que asentar, y tampoco es un error: puede
@@ -132,7 +164,8 @@ public class AutenticacionBusiness : IAutenticacionBusiness
             Mapear(organizacion),
             disponibles,
             token,
-            expira);
+            expira,
+            usuario.DebeCambiarContrasena);
     }
 
     private static OrganizacionDto Mapear(Domain.Negocio.Organizacion o) => new(

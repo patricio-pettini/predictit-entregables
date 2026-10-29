@@ -32,6 +32,9 @@ import type {
   RolDto,
   UsuarioDetalleDto,
   UsuarioListaDto,
+  UsuarioEntradaDto,
+  UsuarioCreadoDto,
+  DatosUsuarioDto,
   EquipoDetalleDto,
   EquipoListaDto,
   FiltroEquipos,
@@ -177,6 +180,12 @@ export const api = {
       pedir<SesionDto>('/auth/organizacion', {
         method: 'POST',
         body: JSON.stringify({ idOrganizacion }),
+      }),
+
+    cambiarContrasena: (actual: string, nueva: string) =>
+      pedir<void>('/auth/contrasena', {
+        method: 'POST',
+        body: JSON.stringify({ actual, nueva }),
       }),
   },
 
@@ -486,6 +495,12 @@ export const api = {
 
     asignarRoles: (id: string, idsRol: string[]) =>
       pedir<void>(`/usuarios/${id}/roles`, { method: 'PUT', body: JSON.stringify({ idsRol }) }),
+
+    crear: (entrada: UsuarioEntradaDto) =>
+      pedir<UsuarioCreadoDto>('/usuarios', { method: 'POST', body: JSON.stringify(entrada) }),
+
+    actualizar: (id: string, datos: DatosUsuarioDto) =>
+      pedir<void>(`/usuarios/${id}`, { method: 'PUT', body: JSON.stringify(datos) }),
   },
 
   bitacora: {

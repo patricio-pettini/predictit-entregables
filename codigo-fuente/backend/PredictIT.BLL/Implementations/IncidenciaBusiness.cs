@@ -34,9 +34,19 @@ public class IncidenciaBusiness(
     IContextoSesion contexto,
     IBitacoraService bitacora,
     IProveedorIA proveedorIa,
-    Func<IPrediccionBusiness> prediccion) : IIncidenciaBusiness
+    Func<IPrediccionBusiness> prediccion,
+    IProveedorIA? respaldoHeuristico = null) : IIncidenciaBusiness
 {
     private static readonly JsonSerializerOptions JsonCompacto = new() { WriteIndented = false };
+
+    /// <summary>
+    /// Las heurísticas propias, para cuando el proveedor externo no responde
+    /// (RF-07b, RF-15, RNF-10). Son deterministas y no usan red: con el
+    /// proveedor caído, la clasificación y la guía salen de reglas y lo dicen,
+    /// en lugar de quedar vacías. La asignación tiene su propio respaldo —el
+    /// técnico de menor carga— y no pasa por acá.
+    /// </summary>
+    private readonly IProveedorIA _heuristico = respaldoHeuristico ?? new ProveedorIASimulado();
 
     public PaginaDto<IncidenciaListaDto> Buscar(FiltroIncidencias filtro)
     {
@@ -534,11 +544,26 @@ public class IncidenciaBusiness(
         var origen = OrigenDe(proveedorIa);
         var resultado = proveedorIa.SugerirReparacionAsync(ctx).GetAwaiter().GetResult();
 
+        // Con el proveedor externo caído la guía sale del procedimiento
+        // estándar de la categoría (RF-15). Se marca como no disponible —la de
+        // IA no lo está— y se dice por qué: el técnico tiene pasos con qué
+        // trabajar y sabe que son genéricos.
+        string? motivo = null;
+        if (!resultado.Ok)
+        {
+            motivo = $"El proveedor de IA no respondió ({resultado.Detalle ?? resultado.Falla?.ToString() ?? "sin respuesta"}): " +
+                     "la guía sale del procedimiento estándar de la categoría.";
+            resultado = _heuristico.SugerirReparacionAsync(ctx).GetAwaiter().GetResult();
+            origen = "HEURISTICA";
+        }
+
         bitacora.Registrar(
             origen == "IA" ? TipoEvento.Codigos.GuiaReparacionIa
                            : TipoEvento.Codigos.GuiaReparacionHeuristica,
             $"Guía de reparación consultada para la incidencia #{i.Numero} " +
-            $"({(resultado.Ok ? "respondió" : resultado.Falla?.ToString() ?? "sin respuesta")}).",
+            (motivo is null
+                ? $"({(resultado.Ok ? "respondió" : resultado.Falla?.ToString() ?? "sin respuesta")})."
+                : "(el proveedor de IA no respondió: procedimiento estándar)."),
             contexto.IdUsuario, contexto.IdOrganizacion, "Incidencia", idIncidencia);
 
         if (!resultado.Ok || resultado.Valor is not { } guia)
@@ -547,17 +572,17 @@ public class IncidenciaBusiness(
             // pensando que el sistema no tiene nada para sugerir, que es
             // distinto de que el proveedor no haya contestado.
             return new GuiaReparacionDto(false, null, [], null, null, origen,
-                                         resultado.Detalle ?? "El proveedor no respondió.");
+                                         motivo ?? resultado.Detalle ?? "El proveedor no respondió.");
         }
 
         return new GuiaReparacionDto(
-            true,
+            motivo is null,
             guia.Resumen,
             guia.Pasos.Select(p => new PasoReparacionDto(p.Orden, p.Titulo, p.Detalle, p.Riesgo)).ToList(),
             guia.CuandoEscalar,
             guia.Confianza,
             origen,
-            null);
+            motivo);
     }
 
     // ------------------------------------------------------------- privados
@@ -585,7 +610,15 @@ public class IncidenciaBusiness(
                 .Select(i => new IncidenciaAbierta(i.Id, i.Numero, i.Titulo)).ToList()
         };
 
+        var origen = OrigenDe(proveedorIa);
         var resultado = proveedorIa.ClasificarAsync(ctx).GetAwaiter().GetResult();
+
+        if (!resultado.Ok)
+        {
+            resultado = _heuristico.ClasificarAsync(ctx).GetAwaiter().GetResult();
+            origen = "HEURISTICA";
+        }
+
         if (!resultado.Ok || resultado.Valor is not { } c) return null;
 
         var duplicada = c.DuplicadaDe is { } numero
@@ -599,7 +632,7 @@ public class IncidenciaBusiness(
                 .FirstOrDefault(p => string.Equals(p.Nombre, c.Prioridad, StringComparison.OrdinalIgnoreCase))?.Id,
             IdIncidenciaDuplicada = duplicada,
             Confianza = c.Confianza,
-            Origen = OrigenDe(proveedorIa),
+            Origen = origen,
             Justificacion = c.Justificacion
         };
     }

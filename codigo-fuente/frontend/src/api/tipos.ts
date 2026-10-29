@@ -90,6 +90,32 @@ export interface SesionDto {
   organizacionesDisponibles: OrganizacionDto[];
   token: string;
   expira: string;
+  /** Entró con la contraseña temporal del alta: la sesión no tiene patentes hasta cambiarla. */
+  debeCambiarContrasena?: boolean;
+}
+
+/** Alta de un usuario. La contraseña no viaja: la genera el sistema. */
+export interface UsuarioEntradaDto {
+  nombre: string;
+  apellido: string;
+  email: string;
+  username: string;
+  telefono?: string | null;
+  idsRol: string[];
+}
+
+export interface DatosUsuarioDto {
+  nombre: string;
+  apellido: string;
+  email: string;
+  telefono?: string | null;
+}
+
+/** La única vez que la contraseña temporal sale del sistema. */
+export interface UsuarioCreadoDto {
+  id: string;
+  username: string;
+  contrasenaTemporal: string;
 }
 
 export interface EquipoListaDto {
@@ -622,6 +648,8 @@ export interface UsuarioListaDto {
   roles: string[];
   cantidadPatentes: number;
   incidenciasAbiertas: number;
+  nombre?: string;
+  apellido?: string;
 }
 
 export interface RolDto {

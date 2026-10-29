@@ -99,7 +99,23 @@ const PANTALLAS = [
   { id: '23-pedido-detalle', ruta: '/mis-pedidos', perfil: 'solicitante', espera: 'pedido',
     titulo: 'El detalle de un pedido, contado sin el vocabulario del taller',
     clic: '.tarjeta.pedido' },
+  { id: '29-cambiar-contrasena', ruta: '/cuenta/contrasena', perfil: 'admin',
+    espera: 'ontrase',
+    titulo: 'El cambio de contraseña propia, obligatorio en el primer ingreso del alta' },
 ];
+
+// Sin argumentos se sacan todas. Con ids, solo esas: cuando se agrega una
+// pantalla no hace falta volver a sacar las veintiocho, y evitar eso importa
+// porque el documento lleva los bytes de cada imagen adentro y rehacerlas
+// todas obliga a actualizarlo entero.
+const PEDIDAS = process.argv.slice(2).filter((a) => !a.startsWith('-'));
+const AGENDA = PEDIDAS.length
+  ? PANTALLAS.filter((p) => PEDIDAS.some((q) => p.id.includes(q)))
+  : PANTALLAS;
+if (PEDIDAS.length && AGENDA.length === 0) {
+  console.error('Ninguna pantalla coincide con: ' + PEDIDAS.join(', '));
+  process.exit(1);
+}
 
 function ejecutable() {
   // Se reusa el Chrome del sistema antes que descargar uno: son 150 MB que ya
@@ -205,7 +221,7 @@ const main = async () => {
   const hechas = [];
   const colapsos = [];
 
-  for (const p of PANTALLAS) {
+  for (const p of AGENDA) {
     process.stdout.write(p.id + ' ... ');
 
     if (p.perfil !== perfilActual) {
@@ -283,9 +299,17 @@ const main = async () => {
 
   // El indice lo leen los generadores de Word para poner el epigrafe de cada
   // figura sin que ese texto se escriba dos veces.
+  //
+  // Lleva todas las pantallas que tienen su imagen en la carpeta, no solo las
+  // de esta corrida: sacar una sola (`npm run capturas -- 29`) dejaba el
+  // indice con una entrada, y el armado siguiente sacaba de los manuales las
+  // otras veintiocho capturas por no tener epigrafe.
+  const indice = PANTALLAS
+    .filter((p) => existsSync(path.join(SALIDA, p.id + '.png')))
+    .map((p) => ({ id: p.id, titulo: p.titulo, archivo: p.id + '.png', perfil: p.perfil }));
   await writeFile(path.join(SALIDA, 'indice.json'),
     JSON.stringify({ generado: new Date().toISOString(), ancho: ANCHO, alto: ALTO,
-                     escala: ESCALA, pantallas: hechas }, null, 2), 'utf8');
+                     escala: ESCALA, pantallas: indice }, null, 2), 'utf8');
 
   await navegador.close();
   console.log('\n' + hechas.length + ' capturas en docs/capturas/');

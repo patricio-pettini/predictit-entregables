@@ -9,6 +9,8 @@ interface EstadoSesion {
   entrar: (username: string, contrasena: string) => Promise<void>;
   salir: () => void;
   cambiarOrganizacion: (id: string) => Promise<void>;
+  /** Vuelve a pedir la sesión: los permisos cambiaron sin cambiar el token. */
+  refrescar: () => Promise<void>;
   /** Indica si el usuario tiene esa patente. Gobierna qué se muestra. */
   puede: (dataKey: string) => boolean;
 }
@@ -54,14 +56,18 @@ export function ProveedorSesion({ children }: { children: ReactNode }) {
     setSesion(nueva);
   }, []);
 
+  const refrescar = useCallback(async () => {
+    setSesion(await api.auth.sesion());
+  }, []);
+
   const puede = useCallback(
     (dataKey: string) => sesion?.patentes.includes(dataKey) ?? false,
     [sesion],
   );
 
   const valor = useMemo<EstadoSesion>(
-    () => ({ sesion, cargando, entrar, salir, cambiarOrganizacion, puede }),
-    [sesion, cargando, entrar, salir, cambiarOrganizacion, puede],
+    () => ({ sesion, cargando, entrar, salir, cambiarOrganizacion, refrescar, puede }),
+    [sesion, cargando, entrar, salir, cambiarOrganizacion, refrescar, puede],
   );
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>;

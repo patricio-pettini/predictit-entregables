@@ -56,12 +56,14 @@ demostración; no hay que correr nada más.
 | Aplicación | <http://localhost:8080> |
 | API y Swagger | <http://localhost:8081/swagger> |
 
-| Usuario | Contraseña | Perfil |
-|---|---|---|
-| `admin` | `Admin.2026` | Administrador |
-| `tecnico1` … `tecnico3` | `Tecnico.2026` | Responsable Técnico |
-| `solicitante` | `Usuario.2026` | Usuario Solicitante |
-| `partner` | `Partner.2026` | Partner (varias organizaciones) |
+Hay cuatro perfiles de demostración: Administrador (`admin`), Responsable
+Técnico (`tecnico1` a `tecnico3`), Usuario Solicitante (`solicitante`) y
+Partner (`partner`). Conviene entrar con más de uno, porque cada uno ve un
+sistema distinto.
+
+**Las contraseñas no están en el repositorio.** Para generar las tuyas,
+`.\db\cambiar-contrasenas-demo.ps1 -Si`. Las de la instancia publicada están
+en el documento que acompaña la entrega.
 
 ### 4. Apagar
 

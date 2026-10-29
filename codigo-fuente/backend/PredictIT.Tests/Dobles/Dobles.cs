@@ -95,7 +95,10 @@ public class IncidenciaDaoFalso : IIncidenciaDao
         };
     }
     public int ProximoNumero() => throw Sin(nameof(ProximoNumero));
-    public IList<Incidencia> AbiertasDeEquipo(Guid idEquipo) => throw Sin(nameof(AbiertasDeEquipo));
+    /// <summary>Las guardadas del equipo cuentan como abiertas: la prueba que
+    /// las agrega es la que decide que lo están.</summary>
+    public IList<Incidencia> AbiertasDeEquipo(Guid idEquipo) =>
+        Guardadas.Values.Where(i => i.IdEquipo == idEquipo).ToList();
     public IList<Incidencia> DeEquipoDesde(Guid idEquipo, DateTime desde) => throw Sin(nameof(DeEquipoDesde));
     public void GuardarClasificacion(ClasificacionIncidencia c) => throw Sin(nameof(GuardarClasificacion));
     public void GuardarRecomendacion(RecomendacionAsignacion r) => throw Sin(nameof(GuardarRecomendacion));
@@ -210,12 +213,12 @@ public class FabricaFalsa(IIncidenciaDao incidencias, ICatalogoDao catalogos,
 /// <summary>Anota lo que se le pide registrar, para poder afirmarlo.</summary>
 public class BitacoraFalsa : IBitacoraService
 {
-    public List<(string Codigo, string Descripcion)> Eventos { get; } = [];
+    public List<(string Codigo, string Descripcion, Guid? IdUsuario, Guid? IdOrganizacion)> Eventos { get; } = [];
 
     public void Registrar(string codigoTipoEvento, string descripcion, Guid? idUsuario = null,
                           Guid? idOrganizacion = null, string? entidad = null, Guid? idEntidad = null,
                           string? ip = null, string? traza = null) =>
-        Eventos.Add((codigoTipoEvento, descripcion));
+        Eventos.Add((codigoTipoEvento, descripcion, idUsuario, idOrganizacion));
 
     public void RegistrarAccesoExitoso(Usuario usuario, Guid idOrganizacion, string? ip) { }
     public void RegistrarIntentoFallido(string username, string? ip, string motivo, Guid? idUsuario = null) { }
@@ -261,14 +264,15 @@ public class PrediccionFalsa : IPrediccionBusiness
 }
 
 /// <summary>La base de seguridad: sólo usuarios, y vacía salvo que la prueba cargue.</summary>
-public class FabricaSeguridadFalsa(IUsuarioDao usuarios, IBitacoraDao? bitacora = null)
+public class FabricaSeguridadFalsa(IUsuarioDao usuarios, IBitacoraDao? bitacora = null,
+                                   IRespaldoDao? respaldos = null, IPermisoDao? permisos = null)
     : IFactoryDaoSeguridad
 {
     public IUsuarioDao Usuarios { get; } = usuarios;
 
-    public IPermisoDao Permisos => throw Sin(nameof(Permisos));
+    public IPermisoDao Permisos => permisos ?? throw Sin(nameof(Permisos));
     public IBitacoraDao Bitacora => bitacora ?? throw Sin(nameof(Bitacora));
-    public IRespaldoDao Respaldos => throw Sin(nameof(Respaldos));
+    public IRespaldoDao Respaldos => respaldos ?? throw Sin(nameof(Respaldos));
     public IIdiomaDao Idiomas => throw Sin(nameof(Idiomas));
 
     private static NotSupportedException Sin(string miembro) =>
@@ -287,8 +291,32 @@ public class UsuarioDaoFalso : IUsuarioDao
     public void RegistrarAccesoFallido(Guid idUsuario) => throw Sin(nameof(RegistrarAccesoFallido));
     public void CambiarEstado(Guid idUsuario, bool activo) => throw Sin(nameof(CambiarEstado));
     public void Desbloquear(Guid idUsuario) => throw Sin(nameof(Desbloquear));
-    public void AsignarRoles(Guid idUsuario, IEnumerable<Guid> idsRol) => throw Sin(nameof(AsignarRoles));
     public void ActualizarHash(Guid idUsuario, string hash) => throw Sin(nameof(ActualizarHash));
+
+    /// <summary>Los roles que se le asignaron a cada usuario, para afirmarlos.</summary>
+    public Dictionary<Guid, List<Guid>> RolesAsignados { get; } = [];
+
+    public void AsignarRoles(Guid idUsuario, IEnumerable<Guid> idsRol) =>
+        RolesAsignados[idUsuario] = idsRol.ToList();
+
+    public void Insert(Usuario usuario)
+    {
+        if (usuario.Id == Guid.Empty) usuario.Id = Guid.NewGuid();
+        Usuarios.Add(usuario);
+    }
+
+    public void ActualizarDatos(Usuario usuario) { }
+
+    public void EstablecerContrasena(Guid idUsuario, string hash, bool debeCambiar)
+    {
+        var u = GetById(idUsuario) ?? throw Sin(nameof(EstablecerContrasena));
+        u.PasswordHash = hash;
+        u.DebeCambiarContrasena = debeCambiar;
+    }
+
+    public bool Existe(string? username, string? email, Guid? excepto = null) =>
+        Usuarios.Any(u => u.Id != excepto &&
+                          (u.Username == username || u.Email == email));
 
     private static NotSupportedException Sin(string miembro) =>
         new($"UsuarioDaoFalso.{miembro} no está preparado: la prueba no debería llegar acá.");

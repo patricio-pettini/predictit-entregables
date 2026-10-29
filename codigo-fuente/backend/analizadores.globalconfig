@@ -1,0 +1,13 @@
+is_global = true
+
+# Las reglas dirigidas de ADR 0008. Con TreatWarningsAsErrors, cada una rompe
+# la compilación. Las excepciones van en el código, con su motivo al lado.
+
+# SQL construido con texto variable. Es el riesgo directo de ADO.NET.
+dotnet_diagnostic.CA2100.severity = warning
+
+# Un objeto descartable que no se libera: SqlConnection, SqlCommand, SqlDataReader.
+dotnet_diagnostic.CA2000.severity = warning
+
+# Un campo descartable que la clase dueña no libera al liberarse.
+dotnet_diagnostic.CA2213.severity = warning

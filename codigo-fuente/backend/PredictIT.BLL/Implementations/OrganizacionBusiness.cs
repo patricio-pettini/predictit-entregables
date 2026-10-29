@@ -13,6 +13,16 @@ namespace PredictIT.BLL.Implementations;
 /// El cálculo del plan está acá y no en el frontend a propósito: es el número
 /// que sostiene la justificación económica del capítulo 6 del trabajo, y tiene
 /// que dar lo mismo desde cualquier consumidor.
+///
+/// <para>
+/// Cuántos equipos se cuentan lo decide <see cref="Administrados"/>, y no
+/// <c>ContarPorOrganizacion</c>, que cuenta todo lo registrado. La diferencia
+/// son los equipos dados de baja, y no es cosmética: con la cuenta vieja la
+/// pantalla anunciaba 52 equipos y 244.400 pesos de abono, y el comprobante del
+/// mismo período facturaba 47 y 223.400. Dos números que dicen llamarse
+/// «equipos administrados» y no coinciden dejan al cliente creyéndose pasado
+/// del plan y a la factura diciendo otra cosa.
+/// </para>
 /// </summary>
 public class OrganizacionBusiness : IOrganizacionBusiness
 {
@@ -45,7 +55,7 @@ public class OrganizacionBusiness : IOrganizacionBusiness
         var plan = _dao.Organizaciones.PlanDe(_contexto.IdOrganizacion)
                    ?? throw new BusinessException("La organización no tiene un plan asignado.");
 
-        var equipos = _dao.Equipos.ContarPorOrganizacion();
+        var equipos = Administrados();
         var adicionales = Math.Max(0, equipos - plan.EquiposIncluidos);
         var costoAdicionales = adicionales * plan.PrecioEquipoAdicional;
 
@@ -101,11 +111,21 @@ public class OrganizacionBusiness : IOrganizacionBusiness
             De(TipoEvento.Codigos.GuiaReparacionHeuristica));
     }
 
+    /// <summary>
+    /// Los equipos que el plan comercial cobra, hoy.
+    ///
+    /// Se le pregunta al mismo lugar que arma el comprobante en lugar de
+    /// repetir el criterio acá: repetirlo es exactamente como las dos cuentas
+    /// se separaron la primera vez.
+    /// </summary>
+    private int Administrados() =>
+        _dao.Facturacion.EquiposAdministradosAl(DateOnly.FromDateTime(DateTime.Today));
+
     public ResumenNavegacionDto ResumenDeNavegacion()
     {
         return new ResumenNavegacionDto(
             _contexto.Tiene(Patentes.EquipoVer)
-                ? _dao.Equipos.ContarPorOrganizacion()
+                ? Administrados()
                 : null,
             IncidenciasAbiertas(),
             _contexto.Tiene(Patentes.MantenimientoVer)

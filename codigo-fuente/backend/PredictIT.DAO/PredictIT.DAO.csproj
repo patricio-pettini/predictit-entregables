@@ -6,6 +6,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.2" />
+    <!-- Transitiva de SqlClient, fijada a mano: la 9.0.13 que trae tiene la
+         CVE-2026-84008 (denegación de servicio, severidad alta), publicada el
+         13/10. Se puede sacar cuando SqlClient traiga la 9.0.21 o posterior. -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
   </ItemGroup>
 
   <PropertyGroup>

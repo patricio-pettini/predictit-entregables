@@ -85,6 +85,42 @@ public class ResumenDeNavegacionTests : IClassFixture<WebApplicationFactory<Prog
             .Should().Be(plan.GetProperty("equiposAdministrados").GetInt32());
     }
 
+    /// <summary>
+    /// Los equipos que se anuncian son los que se cobran.
+    ///
+    /// La prueba de arriba compara los dos contadores **entre sí**, y por eso
+    /// no sirvió: los dos contaban todo lo registrado, los dos estaban mal y la
+    /// prueba pasaba. La barra lateral decía «52/15 eq.» y el comprobante del
+    /// mismo parque facturaba 47, porque el comprobante descuenta los equipos
+    /// dados de baja y el contador no. Veintiún mil pesos de diferencia entre
+    /// lo que la pantalla anuncia y lo que la factura cobra.
+    ///
+    /// Ésta ata el número a algo externo a los dos: el listado que el usuario
+    /// ve, donde cada equipo trae su estado. Un contador que vuelva a incluir
+    /// bajas la rompe.
+    /// </summary>
+    [Fact]
+    public async Task No_se_anuncian_equipos_que_la_factura_no_cobra()
+    {
+        var cliente = await Entrar("admin", "Admin.2026");
+
+        var listado = JsonDocument.Parse(await (await cliente.GetAsync(
+                "/api/equipos?porPagina=1000")).Content.ReadAsStringAsync()).RootElement;
+
+        var registrados = listado.GetProperty("total").GetInt32();
+        var dadosDeBaja = listado.GetProperty("items").EnumerateArray()
+            .Count(e => e.GetProperty("estado").GetString() == "Dado de baja");
+
+        var anunciados = (await Resumen(cliente)).GetProperty("equipos").GetInt32();
+
+        anunciados.Should().Be(registrados - dadosDeBaja);
+
+        // Y que el seed tenga al menos una baja, porque si no la prueba pasa
+        // sin ejercitar nada: con cero bajas los dos criterios dan lo mismo.
+        dadosDeBaja.Should().BeGreaterThan(0,
+            "sin equipos dados de baja esta prueba no distingue los dos criterios");
+    }
+
     [Fact]
     public async Task El_solicitante_no_recibe_lo_que_no_puede_ver()
     {

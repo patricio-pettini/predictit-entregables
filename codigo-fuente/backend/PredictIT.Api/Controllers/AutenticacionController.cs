@@ -62,6 +62,22 @@ public class AutenticacionController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Cambio de la contraseña propia (RF-02). Obligatorio después del alta:
+    /// hasta hacerlo, la sesión no tiene patentes.
+    ///
+    /// No pide patente, pide sesión, y comparte el límite por origen del login:
+    /// verificar la contraseña actual es otra puerta para probar contraseñas.
+    /// </summary>
+    [EnableRateLimiting(Politicas.IntentosDeLogin)]
+    [HttpPost("contrasena")]
+    [Authorize]
+    public IActionResult CambiarContrasena([FromBody] CambioContrasenaDto entrada)
+    {
+        _negocio.Autenticacion.CambiarContrasena(entrada, IpDelCliente());
+        return NoContent();
+    }
+
     /// <summary>Cambio de organización activa. Sólo el perfil Partner.</summary>
     [HttpPost("organizacion")]
     [Authorize]

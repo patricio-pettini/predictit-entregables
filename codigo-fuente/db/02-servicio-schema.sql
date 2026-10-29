@@ -174,6 +174,15 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'UX_Usuario_username')
 CREATE UNIQUE NONCLUSTERED INDEX UX_Usuario_username ON dbo.Usuario(username);
 GO
+
+/* La contraseña temporal que genera el alta de un usuario obliga a cambiarla
+   en el primer ingreso. Mientras esta marca está en 1 la sesión no lleva
+   ninguna patente: lo único que se puede hacer es cambiar la contraseña.
+   Se agrega con ALTER para que una base ya creada la reciba al reaplicar. */
+IF COL_LENGTH(N'dbo.Usuario', N'debe_cambiar_contrasena') IS NULL
+    ALTER TABLE dbo.Usuario ADD debe_cambiar_contrasena BIT NOT NULL
+        CONSTRAINT DF_Usuario_debe_cambiar DEFAULT 0;
+GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Usuario_organizacion')
 CREATE NONCLUSTERED INDEX IX_Usuario_organizacion ON dbo.Usuario(id_organizacion) WHERE id_organizacion IS NOT NULL;
 GO

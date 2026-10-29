@@ -100,12 +100,15 @@ public class GuiaConProveedorCaidoTests : IClassFixture<GuiaConProveedorCaidoTes
 
         var guia = JsonDocument.Parse(await respuesta.Content.ReadAsStringAsync()).RootElement;
 
-        // 2 · Viene marcada como no disponible y con el motivo. Una lista vacía
-        //     dejaría al técnico pensando que el sistema no tiene nada para
-        //     sugerir, que es distinto de que el proveedor no haya contestado.
+        // 2 · La de IA viene marcada como no disponible y con el motivo, y en su
+        //     lugar llegan los pasos del procedimiento estándar de la categoría
+        //     (RF-15, RNF-10): el técnico tiene con qué trabajar y sabe que son
+        //     genéricos. Hasta la segunda entrega de tecnología llegaba vacía,
+        //     y el capítulo 10 prometía las dos cosas en lugares distintos.
         guia.GetProperty("disponible").GetBoolean().Should().BeFalse();
-        guia.GetProperty("motivo").GetString().Should().NotBeNullOrWhiteSpace();
-        guia.GetProperty("pasos").GetArrayLength().Should().Be(0);
+        guia.GetProperty("motivo").GetString().Should().Contain("procedimiento estándar");
+        guia.GetProperty("origen").GetString().Should().Be("HEURISTICA");
+        guia.GetProperty("pasos").GetArrayLength().Should().BeGreaterThan(0);
 
         // 3 · La incidencia no quedó tocada: pedir una guía es una consulta.
         var (_, estadoDespues, diagnosticoDespues) = await UnaIncidencia(cliente);

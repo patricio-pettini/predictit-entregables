@@ -29,6 +29,12 @@ public class Usuario
     public Guid? IdOrganizacion { get; set; }
     public Guid? IdIdioma { get; set; }
 
+    /// <summary>
+    /// La contraseña es la temporal del alta y hay que cambiarla antes de
+    /// operar. Mientras esté en true la sesión no lleva ninguna patente.
+    /// </summary>
+    public bool DebeCambiarContrasena { get; set; }
+
     public IList<Rol> Roles { get; } = new List<Rol>();
     public IList<Guid> OrganizacionesHabilitadas { get; } = new List<Guid>();
 

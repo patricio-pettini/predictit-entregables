@@ -180,6 +180,29 @@ public interface IUsuarioDao
     /// pedirle que la cambie.
     /// </summary>
     void ActualizarHash(Guid idUsuario, string hash);
+
+    /// <summary>
+    /// Da de alta un usuario en una organización. El hash ya viene derivado:
+    /// la contraseña en claro no baja de la capa de negocio.
+    /// </summary>
+    void Insert(Usuario usuario);
+
+    /// <summary>Los datos de contacto. La contraseña, el estado y los roles van aparte.</summary>
+    void ActualizarDatos(Usuario usuario);
+
+    /// <summary>
+    /// Reemplaza la contraseña y dice si hay que volver a cambiarla en el
+    /// próximo ingreso. Es lo que usa el cambio de contraseña del propio
+    /// usuario, que la deja en false.
+    /// </summary>
+    void EstablecerContrasena(Guid idUsuario, string hash, bool debeCambiar);
+
+    /// <summary>
+    /// Si ya hay otro usuario con ese nombre de usuario o ese correo, en todo
+    /// el sistema y no sólo en la organización: el ingreso es por nombre de
+    /// usuario, sin organización, así que dos iguales no se podrían distinguir.
+    /// </summary>
+    bool Existe(string? username, string? email, Guid? excepto = null);
 }
 
 /// <summary>Carga el árbol de permisos: roles, familias anidadas y patentes.</summary>

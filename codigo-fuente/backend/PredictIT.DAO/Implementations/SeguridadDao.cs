@@ -10,7 +10,8 @@ public class UsuarioDao : IUsuarioDao
 {
     private const string Seleccion = @"
         SELECT id_usuario, nombre, apellido, email, username, [password], telefono, activo,
-               bloqueado, intentos_fallidos, fecha_alta, ultimo_acceso, id_organizacion, id_idioma
+               bloqueado, intentos_fallidos, fecha_alta, ultimo_acceso, id_organizacion, id_idioma,
+               debe_cambiar_contrasena
         FROM dbo.Usuario";
 
     private readonly SqlHelperSeguridad _sql;
@@ -55,6 +56,56 @@ public class UsuarioDao : IUsuarioDao
     public void ActualizarHash(Guid idUsuario, string hash) => _sql.EjecutarNoConsulta(
         "UPDATE dbo.Usuario SET password = @hash WHERE id_usuario = @id;",
         new SqlParameter("@id", idUsuario), new SqlParameter("@hash", hash));
+
+    public void Insert(Usuario u)
+    {
+        if (u.Id == Guid.Empty) u.Id = Guid.NewGuid();
+
+        _sql.EjecutarNoConsulta(@"
+            INSERT INTO dbo.Usuario
+                (id_usuario, nombre, apellido, email, username, [password], telefono,
+                 activo, fecha_alta, id_organizacion, debe_cambiar_contrasena)
+            VALUES (@id, @nombre, @apellido, @email, @username, @hash, @telefono,
+                    1, @ahora, @org, @debe);",
+            new SqlParameter("@id", u.Id),
+            new SqlParameter("@nombre", u.Nombre),
+            new SqlParameter("@apellido", u.Apellido),
+            new SqlParameter("@email", u.Email),
+            new SqlParameter("@username", u.Username),
+            new SqlParameter("@hash", u.PasswordHash),
+            new SqlParameter("@telefono", (object?)u.Telefono ?? DBNull.Value),
+            new SqlParameter("@org", (object?)u.IdOrganizacion ?? DBNull.Value),
+            new SqlParameter("@debe", u.DebeCambiarContrasena),
+            Reloj.Parametro());
+    }
+
+    public void ActualizarDatos(Usuario u) => _sql.EjecutarNoConsulta(@"
+        UPDATE dbo.Usuario
+        SET nombre = @nombre, apellido = @apellido, email = @email, telefono = @telefono
+        WHERE id_usuario = @id;",
+        new SqlParameter("@id", u.Id),
+        new SqlParameter("@nombre", u.Nombre),
+        new SqlParameter("@apellido", u.Apellido),
+        new SqlParameter("@email", u.Email),
+        new SqlParameter("@telefono", (object?)u.Telefono ?? DBNull.Value));
+
+    public void EstablecerContrasena(Guid idUsuario, string hash, bool debeCambiar) =>
+        _sql.EjecutarNoConsulta(@"
+            UPDATE dbo.Usuario
+            SET [password] = @hash, debe_cambiar_contrasena = @debe,
+                intentos_fallidos = 0, bloqueado = 0
+            WHERE id_usuario = @id;",
+            new SqlParameter("@id", idUsuario), new SqlParameter("@hash", hash),
+            new SqlParameter("@debe", debeCambiar));
+
+    public bool Existe(string? username, string? email, Guid? excepto = null) =>
+        Convert.ToInt32(_sql.EjecutarEscalar(@"
+            SELECT COUNT(*) FROM dbo.Usuario
+            WHERE (username = @username OR email = @email)
+              AND (@excepto IS NULL OR id_usuario <> @excepto);",
+            new SqlParameter("@username", (object?)username ?? DBNull.Value),
+            new SqlParameter("@email", (object?)email ?? DBNull.Value),
+            new SqlParameter("@excepto", (object?)excepto ?? DBNull.Value)) ?? 0) > 0;
 
     public void Desbloquear(Guid idUsuario) => _sql.EjecutarNoConsulta(
         "UPDATE dbo.Usuario SET bloqueado = 0, intentos_fallidos = 0 WHERE id_usuario = @id;",

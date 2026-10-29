@@ -57,6 +57,10 @@ public class FactoryBusiness : IFactoryBusiness
                            IRespaldoService respaldos, ICifradoService cifrado,
                            IReporteService reportesPdf)
     {
+        // Todo asiento del negocio sale con quién y con qué organización,
+        // aunque quien lo escribe se olvide de pasarlos.
+        bitacora = new BitacoraDeLaSesion(bitacora, contexto);
+
         _autenticacion = new Lazy<IAutenticacionBusiness>(
             () => new AutenticacionBusiness(seguridad, tokens, dao, daoSeguridad, contexto, bitacora));
         _equipos = new Lazy<IEquipoBusiness>(

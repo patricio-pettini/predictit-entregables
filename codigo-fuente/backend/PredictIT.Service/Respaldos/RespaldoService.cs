@@ -172,6 +172,11 @@ public class RespaldoService(ConexionesMaestro conexiones, OpcionesRespaldo opci
         }
     }
 
+    // La única parte variable del texto es el nombre de la base, y ya pasó por
+    // ValidarNombre: es uno de los dos valores de la lista blanca. La ruta y la
+    // descripción del respaldo van como SqlParameter.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100",
+        Justification = "El nombre de la base se valida contra una lista blanca antes de llegar acá.")]
     private void Ejecutar(string sql, params SqlParameter[] parametros)
     {
         using var cn = new SqlConnection(conexiones.Maestro);

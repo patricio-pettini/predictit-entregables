@@ -198,6 +198,17 @@ public class EquipoBusiness : IEquipoBusiness
         var equipo = _dao.Equipos.GetById(id)
                      ?? throw new BusinessException("El equipo no existe o no pertenece a tu organización.");
 
+        // Es lo que separa la baja del cambio de estado: un equipo con trabajo
+        // pendiente no sale del parque, porque esas incidencias quedarían
+        // abiertas sobre un activo que ya no se ve en ninguna pantalla.
+        var abiertas = _dao.Incidencias.AbiertasDeEquipo(id).Count;
+        if (abiertas > 0)
+        {
+            throw new BusinessException(abiertas == 1
+                ? $"El equipo {equipo.Codigo} tiene una incidencia abierta. Cerrala o anulala antes de darlo de baja."
+                : $"El equipo {equipo.Codigo} tiene {abiertas} incidencias abiertas. Cerralas o anulalas antes de darlo de baja.");
+        }
+
         _dao.Equipos.Delete(id);
 
         _bitacora.Registrar(TipoEvento.Codigos.Baja,

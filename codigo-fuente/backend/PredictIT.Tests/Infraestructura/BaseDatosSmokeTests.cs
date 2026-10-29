@@ -13,6 +13,8 @@ namespace PredictIT.Tests.Infraestructura;
 [Trait("Categoria", "Infraestructura")]
 public class BaseDatosSmokeTests
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100",
+        Justification = "Las consultas son constantes de las propias pruebas, sin datos de entrada.")]
     private static async Task<T> EscalarAsync<T>(string cadena, string sql)
     {
         await using var cn = new SqlConnection(cadena);

@@ -53,4 +53,12 @@ public class ContextoSesion : IContextoSesion
     /// </summary>
     public static ContextoSesion Sistema(Guid idOrganizacion) =>
         new(Guid.Empty, "(sistema)", idOrganizacion, new[] { "ALERTA_VER" });
+
+    /// <summary>
+    /// Contexto del respaldo programado. Las bases son del sistema y no de una
+    /// organización, así que no lleva ninguna; y la única patente es la de
+    /// respaldos, por el mismo motivo que el del barrido.
+    /// </summary>
+    public static ContextoSesion SistemaDeRespaldos() =>
+        new(Guid.Empty, "(sistema)", Guid.Empty, new[] { "BACKUP_GESTIONAR" });
 }

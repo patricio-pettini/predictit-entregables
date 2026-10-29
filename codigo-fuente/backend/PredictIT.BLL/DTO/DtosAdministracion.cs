@@ -66,9 +66,39 @@ public record UsuarioListaDto(
     DateTime? UltimoAcceso,
     IReadOnlyList<string> Roles,
     int CantidadPatentes,
-    int IncidenciasAbiertas);
+    int IncidenciasAbiertas,
+    // Por separado para poder editarlos: el nombre completo no se puede partir
+    // sin adivinar dónde termina el nombre y empieza el apellido.
+    string Nombre = "",
+    string Apellido = "");
 
 public record RolDto(Guid Id, string Nombre, string? Descripcion, bool EsSistema, int CantidadPatentes);
+
+/// <summary>Alta de un usuario (RF-02, CU-002). La contraseña no viaja: la genera el sistema.</summary>
+public record UsuarioEntradaDto
+{
+    public string Nombre { get; init; } = string.Empty;
+    public string Apellido { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
+    public string Username { get; init; } = string.Empty;
+    public string? Telefono { get; init; }
+    public IReadOnlyList<Guid> IdsRol { get; init; } = [];
+}
+
+/// <summary>Los datos de contacto que se pueden modificar.</summary>
+public record DatosUsuarioDto
+{
+    public string Nombre { get; init; } = string.Empty;
+    public string Apellido { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
+    public string? Telefono { get; init; }
+}
+
+/// <summary>
+/// El usuario creado y su contraseña temporal. Es la única vez que la
+/// contraseña sale del sistema: no se guarda en claro ni se vuelve a mostrar.
+/// </summary>
+public record UsuarioCreadoDto(Guid Id, string Username, string ContrasenaTemporal);
 
 /// <summary>Una patente concedida a un usuario, y por qué camino la tiene.</summary>
 /// <param name="TipoAcceso">

@@ -205,6 +205,7 @@ public class PrediccionController(IFactoryBusiness negocio) : ControllerBase
     /// en lugar de a ojo.
     /// </summary>
     [HttpGet("calibracion")]
+    [RequierePatente(Patentes.AlertaVer)]
     public ActionResult<IReadOnlyList<CalibracionReglaDto>> Calibracion() =>
         Ok(negocio.Prediccion.Calibracion());
 

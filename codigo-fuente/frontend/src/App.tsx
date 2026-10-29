@@ -28,6 +28,7 @@ import { Reportar } from './paginas/cliente/Reportar';
 import { MisPedidos } from './paginas/cliente/MisPedidos';
 import { PedidoDetalle } from './paginas/cliente/PedidoDetalle';
 import { NoEncontrada } from './paginas/NoEncontrada';
+import { CambiarContrasena } from './paginas/CambiarContrasena';
 import { Integraciones, Notificaciones } from './paginas/FueraDeAlcance';
 import { useSesion } from './sesion/SesionContext';
 
@@ -42,6 +43,11 @@ export function App() {
   }
 
   if (!sesion) return <Login />;
+
+  // Con la contraseña temporal del alta no hay aplicación: la sesión no trae
+  // ningún permiso hasta que se cambie, así que cualquier pantalla respondería
+  // 403. Se muestra sólo el cambio, como una continuación del ingreso.
+  if (sesion.debeCambiarContrasena) return <CambiarContrasena obligatoria />;
 
   return (
     <Routes>
@@ -83,6 +89,7 @@ export function App() {
         <Route path="/configuracion/integraciones" element={<Integraciones />} />
         <Route path="/configuracion/ia" element={<IntegracionIa />} />
         <Route path="/configuracion/apariencia" element={<Apariencia />} />
+        <Route path="/cuenta/contrasena" element={<CambiarContrasena />} />
         {/*
           La raiz redirige y cualquier otra direccion desconocida muestra el
           404. Son dos casos distintos: entrar a `/` es normal y hay que

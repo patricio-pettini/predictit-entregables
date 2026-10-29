@@ -250,14 +250,19 @@ function Sidebar() {
             <div>{sesion?.roles.join(', ')}</div>
           </div>
         </div>
-        <button
-          type="button"
-          className="btn plano"
-          style={{ padding: 0, height: 'auto', marginTop: 8 }}
-          onClick={salir}
-        >
-          {t('nav.salir', 'Cerrar sesión')}
-        </button>
+        <div style={{ display: 'flex', gap: 14, marginTop: 8 }}>
+          <Link to="/cuenta/contrasena" className="btn plano" style={{ padding: 0, height: 'auto' }}>
+            {t('nav.contrasena', 'Contraseña')}
+          </Link>
+          <button
+            type="button"
+            className="btn plano"
+            style={{ padding: 0, height: 'auto' }}
+            onClick={salir}
+          >
+            {t('nav.salir', 'Cerrar sesión')}
+          </button>
+        </div>
       </div>
     </aside>
   );

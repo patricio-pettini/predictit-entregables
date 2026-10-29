@@ -2,6 +2,7 @@ using PredictIT.BLL.Contracts;
 using PredictIT.BLL.DTO;
 using PredictIT.DAO.Contracts;
 using PredictIT.DAO.Factory;
+using PredictIT.DAO.Helpers;
 using PredictIT.Domain.Negocio;
 using PredictIT.Domain.Seguridad;
 using PredictIT.Service.IA;
@@ -98,7 +99,12 @@ public class RespaldoBusiness(
             true, resultado.Detalle);
     }
 
-    public RespaldoDto Respaldar(string nombreBase)
+    public RespaldoDto Respaldar(string nombreBase) => Respaldar(nombreBase, automatico: false);
+
+    public IReadOnlyList<RespaldoDto> RespaldoProgramado() =>
+        respaldos.BasesQueRespalda.Select(b => Respaldar(b, automatico: true)).ToList();
+
+    private RespaldoDto Respaldar(string nombreBase, bool automatico)
     {
         Exigir(Patentes.BackupGestionar);
 
@@ -107,6 +113,11 @@ public class RespaldoBusiness(
 
         var resultado = respaldos.Respaldar(nombreBase);
 
+        // El automático no tiene a quién atribuirse: queda sin usuario, que es
+        // lo que la bitácora y la pantalla muestran como «el sistema».
+        Guid? quien = automatico || Contexto.IdUsuario == Guid.Empty ? null : Contexto.IdUsuario;
+        Guid? organizacion = Contexto.IdOrganizacion == Guid.Empty ? null : Contexto.IdOrganizacion;
+
         // Se registra el intento haya salido bien o mal. Un respaldo que falla en
         // silencio es el peor de los casos: nadie se enteraría hasta necesitarlo.
         var registro = new Respaldo
@@ -114,21 +125,25 @@ public class RespaldoBusiness(
             Base = resultado.Base,
             NombreArchivo = resultado.NombreArchivo,
             Ruta = resultado.Ruta,
-            Fecha = DateTime.Now,
+            Fecha = Reloj.Ahora,
             TamanoBytes = resultado.TamanoBytes,
-            Tipo = "MANUAL",
-            IdUsuario = Contexto.IdUsuario,
+            Tipo = automatico ? "AUTOMATICO" : "MANUAL",
+            IdUsuario = quien,
             Resultado = resultado.Ok ? "OK" : "ERROR",
             Detalle = resultado.Detalle
         };
 
         Seguridad.Respaldos.Registrar(registro);
 
+        // Con usuario y organización: sin ellos el asiento existía pero no
+        // salía en la bitácora de nadie, que es como no haberlo escrito.
+        var origen = automatico ? "Respaldo programado" : "Respaldo";
         bitacora.Registrar(resultado.Ok ? "BACKUP" : "ERROR_SISTEMA",
             resultado.Ok
-                ? $"Respaldo de {nombreBase} en {resultado.NombreArchivo}" +
-                  (resultado.TamanoBytes is { } t ? $" ({t / 1024 / 1024} MB)" : "") + "."
-                : $"Falló el respaldo de {nombreBase}: {resultado.Detalle}");
+                ? $"{origen} de {nombreBase} en {resultado.NombreArchivo}" +
+                  (resultado.TamanoBytes is { } t ? $" ({Tamano(t)})" : "") + "."
+                : $"Falló el {origen.ToLowerInvariant()} de {nombreBase}: {resultado.Detalle}",
+            quien, organizacion, "Backup", registro.Id);
 
         var nombres = MapaDeUsuarios();
         return new RespaldoDto(
@@ -136,4 +151,10 @@ public class RespaldoBusiness(
             registro.TamanoBytes, registro.Tipo, NombreDe(nombres, registro.IdUsuario),
             resultado.Ok, resultado.Detalle);
     }
+
+    /// <summary>En la unidad que se lee: una base de demostración pesa menos
+    /// de un mega, y «0 MB» en la bitácora parecía un respaldo vacío.</summary>
+    private static string Tamano(long bytes) => bytes < 1024 * 1024
+        ? $"{Math.Max(1, bytes / 1024)} KB"
+        : $"{bytes / 1024.0 / 1024.0:0.#} MB";
 }
